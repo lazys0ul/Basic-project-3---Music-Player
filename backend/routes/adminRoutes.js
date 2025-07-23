@@ -8,4 +8,5 @@ adminRouter.post('/register', register)
 adminRouter.post('/login', login)
 adminRouter.post('/add-music', upload.fields([{name:'music', maxCount: 1}, {name: 'image', maxCount: 1}]), uploadMusic)
 
+
 export default adminRouter

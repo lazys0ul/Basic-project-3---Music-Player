@@ -1,6 +1,8 @@
 import adminModel from "../models/adminModel.js"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { title } from "process"
+import path from 'path'
 
 const register = async (req, res) => {
   try {
@@ -85,10 +87,62 @@ const login = async (req, res) => {
 
         res.status(200).json({ success: true, message: "User logged in successfully", user: userResponse, token })
 
+
+
     } catch (error) {
       console.log(error) 
-        res.status(500).json({ success: false, message: "Server error" })
-  }
+        res.status(500).json({ success: false, message: 'Internal server error' })
+    }
 }
 
-export { register, login }
+const uploadMusic = async (req, res) => {
+    try {
+
+        const { title, artist} = req.body
+
+        if (!title || !artist ){
+            return res.status(400).json({ success: false, message: "All fields are required" })
+        }
+        
+        const musicFile = req.files.music?.[0]
+        const imageFile = req.files.image?.[0]
+
+        if (!musicFile) {
+            return res.status(400).json({ success: false, message: "No music file detected" })
+        }
+
+        if (!imageFile) {
+            return res.status(400).json({ success: false, message: "No image file detected" })
+        }
+
+        const allowedExtensions = ['.mp3', '.wav', '.flac', '.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const musicExt = path.extname(musicFile.originalname).toLowerCase()
+        const imageExt = path.extname(imageFile.originalname).toLowerCase()
+
+        if (!allowedExtensions.includes(musicExt) || !allowedExtensions.includes(imageExt)) {
+            return res.status(400).json({ success: false, message: "Invalid file type. Only audio (.mp3, .wav, .flac) and image files (.jpg, .jpeg, .png, .gif, .webp) are allowed." });
+        }
+
+        const filePath = musicFile.path
+        const imageFilePath = imageFile.path
+
+        const music = new musicModel({
+            title,
+            artist,
+            filepath: filePath,
+            imageFilepath: imageFilePath
+        })
+
+        await music.save()
+
+        res.status(201).json({ success: true, message: "Your music is uploaded successfully", music })
+
+
+    } catch (error) {
+       console.log(error) 
+        res.status(500).json({ success: false, message: "Internal server error" }) 
+    }
+}
+
+
+export { register, login, uploadMusic}

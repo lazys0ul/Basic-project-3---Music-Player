@@ -145,5 +145,40 @@ const uploadMusic = async (req, res) => {
     }
 }
 
+const getMusic = async (req, res) => {
+    try {
+        
+       const music = await musicModel.find()
+        if (!music || music.length === 0) {
+            return res.status(404).json({ success: false, message: "No music found" })
+        }
 
-export { register, login, uploadMusic}
+        res.status(200).json({ success: true, message: "Music retrieved successfully", music })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: "Internal server error"  })
+    }
+}
+
+
+const deleteMusic = async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+
+        const music = await musicModel.findByIdAndDelete(id);
+        if (!music) {
+            return res.status(404).json({ success: false, message: "Music not found" })
+        }
+
+        res.status(200).json({ success: true, message: "Music deleted successfully", music })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: "Internal server error" })
+        
+    }
+}
+
+export { register, login, uploadMusic, getMusic, deleteMusic }

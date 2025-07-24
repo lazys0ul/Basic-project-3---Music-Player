@@ -14,7 +14,7 @@ const musicSchema = new mongoose.Schema({
         required: true 
     },
     imageFilepath: { 
-        type: Number, 
+        type: String,  // ✅ Changed from Number to String
         required: true 
     }
 }, {timestamps: true})

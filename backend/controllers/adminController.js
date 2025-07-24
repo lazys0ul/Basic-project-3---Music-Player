@@ -1,4 +1,5 @@
 import adminModel from "../models/adminModel.js"
+import musicModel from "../models/musicModel.js"  // ✅ Add this line
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { title } from "process"

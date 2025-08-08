@@ -1,0 +1,37 @@
+services:
+  # Backend API
+  - type: web
+    name: resona-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGO_URL
+        fromDatabase:
+          name: resona-db
+          property: connectionString
+
+  # Frontend React App  
+  - type: web
+    name: resona-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    plan: free
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: resona-backend
+          property: host
+
+databases:
+  - name: resona-db
+    plan: free

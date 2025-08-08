@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useMusic } from '../../context/MusicContext';
+import React, { useState, useMemo } from 'react';
+import { useMusic } from '../../hooks/useMusic';
 import SearchBar from './SearchBar';
 import { 
   FaPlay, 
@@ -38,7 +38,7 @@ const MusicLibrary = () => {
   };
 
   // Filter and sort music
-  const sortedMusic = React.useMemo(() => {
+  const sortedMusic = useMemo(() => {
     let sorted = [...playlist];
 
     switch (sortBy) {

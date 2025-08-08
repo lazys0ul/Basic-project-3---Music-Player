@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Context
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { MusicProvider } from './context/MusicContext';
+import { useAuth } from './hooks/useAuth';
 import ErrorBoundary from './components/ErrorBoundary';
 
-// Components
-import Login from './components/Auth/Login';
-import Register from './components/Auth/Register';
-import Dashboard from './components/Dashboard/Dashboard';
-import MusicPlayer from './components/Player/MusicPlayer';
+// Lazy load components for better performance
+const Login = lazy(() => import('./components/Auth/Login'));
+const Register = lazy(() => import('./components/Auth/Register'));
+const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
+const MusicPlayer = lazy(() => import('./components/Player/MusicPlayer'));
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -42,41 +43,49 @@ function App() {
 
               {/* Content */}
               <div className="relative z-10">
-                <Routes>
-                  {/* Public Routes */}
-                  <Route 
-                    path="/login" 
-                    element={
-                      <PublicRoute>
-                        <Login />
-                      </PublicRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/register" 
-                    element={
-                      <PublicRoute>
-                        <Register />
-                      </PublicRoute>
-                    } 
-                  />
-                  
-                  {/* Protected Routes */}
-                  <Route 
-                    path="/dashboard" 
-                    element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  
-                  {/* Default Route */}
-                  <Route path="/" element={<Navigate to="/dashboard" />} />
-                </Routes>
+                <Suspense fallback={
+                  <div className="min-h-screen flex items-center justify-center">
+                    <div className="loading-spinner w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                }>
+                  <Routes>
+                    {/* Public Routes */}
+                    <Route 
+                      path="/login" 
+                      element={
+                        <PublicRoute>
+                          <Login />
+                        </PublicRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/register" 
+                      element={
+                        <PublicRoute>
+                          <Register />
+                        </PublicRoute>
+                      } 
+                    />
+                    
+                    {/* Protected Routes */}
+                    <Route 
+                      path="/dashboard" 
+                      element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* Default Route */}
+                    <Route path="/" element={<Navigate to="/dashboard" />} />
+                  </Routes>
+                </Suspense>
                 
                 {/* Global Music Player */}
-                <MusicPlayer />
+                <Suspense fallback={null}>
+                  <MusicPlayer />
+                </Suspense>
               </div>
               
               {/* Enhanced Toast Notifications */}

@@ -1,5 +1,6 @@
-import React from 'react';
-import { useAuth } from '../../context/AuthContext';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import { useAuth } from '../../hooks/useAuth';
 import { 
   FaMusic, 
   FaUpload, 
@@ -159,4 +160,10 @@ const Sidebar = ({ activeTab, setActiveTab, onClose }) => {
   );
 };
 
-export default Sidebar;
+Sidebar.propTypes = {
+  activeTab: PropTypes.string.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
+};
+
+export default memo(Sidebar);

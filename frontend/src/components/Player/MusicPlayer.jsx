@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMusic } from '../../context/MusicContext';
+import { useMusic } from '../../hooks/useMusic';
 import { 
   FaPlay, 
   FaPause, 

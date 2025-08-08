@@ -188,11 +188,29 @@ app.use('*', (req, res) => {
 // Connect to database and start server
 connectDB()
     .then(() => {
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`)
             console.log(`📁 Static files served from: ${path.join(path.resolve(), 'uploads')}`)
             console.log(`🌐 CORS enabled for: http://localhost:3000`)
         })
+        
+        // Set server timeout to 30 seconds
+        server.timeout = 30000;
+        
+        // Graceful shutdown handling
+        const gracefulShutdown = (signal) => {
+            console.log(`\n${signal} received. Shutting down gracefully...`)
+            server.close(() => {
+                console.log('HTTP server closed.')
+                mongoose.connection.close(false, () => {
+                    console.log('MongoDB connection closed.')
+                    process.exit(0)
+                })
+            })
+        }
+        
+        process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
+        process.on('SIGINT', () => gracefulShutdown('SIGINT'))
     })
     .catch((error) => {
         console.error('Failed to connect to database:', error)

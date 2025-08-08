@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useMusic } from '../../context/MusicContext';
+import { useAuth } from '../../hooks/useAuth';
+import { useMusic } from '../../hooks/useMusic';
 import Sidebar from './Sidebar';
 import MusicLibrary from './MusicLibrary';
 import UploadMusic from './UploadMusic';

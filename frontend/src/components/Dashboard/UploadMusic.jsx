@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMusic } from '../../context/MusicContext';
+import { useMusic } from '../../hooks/useMusic';
 import { FaImage, FaCheck } from 'react-icons/fa';
 import { UploadCloudIcon, WaveformIcon } from '../../assets/icons.jsx';
 import { MusicWaveIcon } from '../../assets/resona-brand.jsx';

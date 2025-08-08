@@ -1,16 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const MusicContext = createContext();
-
-export const useMusic = () => {
-  const context = useContext(MusicContext);
-  if (!context) {
-    throw new Error('useMusic must be used within a MusicProvider');
-  }
-  return context;
-};
 
 export const MusicProvider = ({ children }) => {
   const [playlist, setPlaylist] = useState([]);
@@ -34,7 +26,7 @@ export const MusicProvider = ({ children }) => {
     if (playlist[nextIndex]) {
       playTrack(playlist[nextIndex], nextIndex);
     }
-  }, [playlist, currentIndex]);
+  }, [playlist, currentIndex, playTrack]);
 
   // Audio event listeners  
   useEffect(() => {
@@ -171,16 +163,13 @@ export const MusicProvider = ({ children }) => {
     }
   };
 
-  // Play specific track
-  const playTrack = async (track, index) => {
+  const playTrack = useCallback(async (track, index) => {
     setLoading(true);
     const filename = track.filepath.replace(/^uploads[/\\]/, '').replace(/\\/g, '/');
-    // Use the dedicated streaming endpoint instead of static file serving
     const audioUrl = `${BACKEND_URL}/stream/${encodeURIComponent(filename)}`;
     
     try {
       if (currentTrack && currentTrack._id === track._id && !audioRef.current.paused) {
-        // If same track is playing, just pause/resume
         pause();
         return;
       }
@@ -188,7 +177,6 @@ export const MusicProvider = ({ children }) => {
       setCurrentTrack(track);
       setCurrentIndex(index);
       
-      // Update audio source
       audioRef.current.src = audioUrl;
       
       await audioRef.current.load();
@@ -207,7 +195,7 @@ export const MusicProvider = ({ children }) => {
       toast.error(`Failed to play track: ${error.message}`);
       setLoading(false);
     }
-  };
+  }, [currentTrack, BACKEND_URL]);
 
   // Play/pause current track
   const togglePlayPause = async () => {
@@ -241,7 +229,6 @@ export const MusicProvider = ({ children }) => {
     setCurrentTime(0);
   };
 
-  // Play previous track
   const playPrevious = useCallback(() => {
     if (playlist.length === 0) return;
     
@@ -249,7 +236,7 @@ export const MusicProvider = ({ children }) => {
     if (playlist[prevIndex]) {
       playTrack(playlist[prevIndex], prevIndex);
     }
-  }, [playlist, currentIndex]);
+  }, [playlist, currentIndex, playTrack]);
 
   // Seek to specific time
   const seekTo = (time) => {
@@ -295,3 +282,5 @@ export const MusicProvider = ({ children }) => {
     </MusicContext.Provider>
   );
 };
+
+export { MusicContext };

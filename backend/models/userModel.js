@@ -30,6 +30,6 @@ const userSchema = new mongoose.Schema({
 // Add indexes for better performance (email already has unique index)
 userSchema.index({ username: 1 })
 
-const userModel = mongoose.models.user || mongoose.model("User", userSchema)
+const userModel = mongoose.models.User || mongoose.model("User", userSchema)
 
 export default userModel

@@ -17,14 +17,6 @@ const fileFilter = (req, file, cb) => {
     const isMimeTypeValid = file.mimetype.startsWith('audio/') || file.mimetype.startsWith('image/')
     const isExtensionValid = allowedExtensions.includes(ext)
 
-    console.log('File info:', {
-        originalname: file.originalname,
-        mimetype: file.mimetype,
-        extension: ext,
-        isMimeTypeValid,
-        isExtensionValid
-    })
-
     if (isMimeTypeValid && isExtensionValid) {
         cb(null, true)
     } else {

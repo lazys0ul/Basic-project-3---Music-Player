@@ -6,7 +6,9 @@ dotenv.config()
 // Validate required environment variables
 const requiredEnvVars = [
   'MONGO_URL',
-  'JWT_SECRET'
+  'DB_NAME', 
+  'JWT_SECRET',
+  'PORT'
 ]
 
 const validateEnvironment = () => {

@@ -20,9 +20,33 @@ const PORT = process.env.PORT || 5000
 // Security middleware (essential for any web app)
 app.use(helmet({
   crossOriginEmbedderPolicy: false, // Allow audio files to load
-  contentSecurityPolicy: false,     // Allow external resources for development
-  crossOriginResourcePolicy: { policy: "cross-origin" } // Allow cross-origin resources
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"], 
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "blob:"],
+      mediaSrc: ["'self'", "blob:"],
+      connectSrc: ["'self'"]
+    }
+  },
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // Allow cross-origin resources
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" }
 }))
+
+// Additional security headers
+app.use((req, res, next) => {
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
 
 // Rate limiting (prevent abuse) - relaxed for development
 const limiter = rateLimit({
@@ -33,8 +57,8 @@ const limiter = rateLimit({
 app.use('/api/', limiter)
 
 // Middleware
-app.use(express.json({ limit: '10mb' }))
-app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+app.use(express.json({ limit: '1mb' })) // Reduced from 10mb
+app.use(express.urlencoded({ extended: true, limit: '1mb' })) // Reduced from 10mb
 
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001'],

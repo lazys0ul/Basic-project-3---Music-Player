@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap location (add when available)
+# Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow sensitive areas
+Disallow: /api/
+Disallow: /uploads/
+Disallow: /.env
+Disallow: /backend/

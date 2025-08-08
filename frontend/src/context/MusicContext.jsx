@@ -27,7 +27,16 @@ export const MusicProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const API_BASE = `${BACKEND_URL}/api`;
 
-  // Audio event listeners
+  const playNext = useCallback(() => {
+    if (playlist.length === 0) return;
+    
+    const nextIndex = (currentIndex + 1) % playlist.length;
+    if (playlist[nextIndex]) {
+      playTrack(playlist[nextIndex], nextIndex);
+    }
+  }, [playlist, currentIndex]);
+
+  // Audio event listeners  
   useEffect(() => {
     const audio = audioRef.current;
 
@@ -40,10 +49,8 @@ export const MusicProvider = ({ children }) => {
     };
 
     const handleEnded = () => {
-      // Use setTimeout to avoid stale closure issues
-      setTimeout(() => {
-        playNext();
-      }, 0);
+      setIsPlaying(false);
+      playNext();
     };
 
     const handleCanPlayThrough = () => {
@@ -85,8 +92,7 @@ export const MusicProvider = ({ children }) => {
       audio.removeEventListener('error', handleError);
       audio.removeEventListener('loadstart', handleLoadStart);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [playNext]);
 
   // Update audio volume
   useEffect(() => {
@@ -183,8 +189,6 @@ export const MusicProvider = ({ children }) => {
       setCurrentIndex(index);
       
       // Update audio source
-      console.log('Audio URL:', audioUrl); // Debug log
-      console.log('Original filename:', filename); // Debug log
       audioRef.current.src = audioUrl;
       
       await audioRef.current.load();
@@ -237,21 +241,15 @@ export const MusicProvider = ({ children }) => {
     setCurrentTime(0);
   };
 
-  // Play next track
-  const playNext = () => {
-    if (playlist.length === 0) return;
-    
-    const nextIndex = (currentIndex + 1) % playlist.length;
-    playTrack(playlist[nextIndex], nextIndex);
-  };
-
   // Play previous track
-  const playPrevious = () => {
+  const playPrevious = useCallback(() => {
     if (playlist.length === 0) return;
     
     const prevIndex = currentIndex === 0 ? playlist.length - 1 : currentIndex - 1;
-    playTrack(playlist[prevIndex], prevIndex);
-  };
+    if (playlist[prevIndex]) {
+      playTrack(playlist[prevIndex], prevIndex);
+    }
+  }, [playlist, currentIndex]);
 
   // Seek to specific time
   const seekTo = (time) => {

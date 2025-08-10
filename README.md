@@ -62,16 +62,14 @@ Frontend Application: http://localhost:3000
 Backend API Server:   http://localhost:5000
 MongoDB Database:     mongodb://localhost:27017/resona
 
-Demo Account (Pre-configured):
-Email:    test@example.com
-Password: password123
+Note: Register a new account through the app's registration form.
 ```
 
 ### **🎵 First Experience**
-1. **Login** with demo credentials → Instant access to dashboard
-2. **Explore Library** → Pre-loaded with sample tracks  
-3. **Play Music** → Click any track for high-quality streaming
-4. **Upload Content** → Add your own music with cover art
+1. **Register** your account → Create a new user profile
+2. **Explore Interface** → Clean, modern dashboard design
+3. **Upload Music** → Add your own tracks with cover art
+4. **Stream & Enjoy** → High-quality audio playback
 5. **Search & Discover** → Real-time search across your collection
 
 ---
@@ -501,10 +499,6 @@ sudo systemctl start mongod
 
 # Verify connection
 mongosh --eval "db.runCommand('ping').ok"
-```
-
-**Step 5: Environment Configuration**
-
 Create `backend/.env`:
 ```env
 # === DATABASE CONFIGURATION ===
@@ -517,49 +511,25 @@ JWT_SECRET=your_ultra_secure_64_character_jwt_secret_key_here
 JWT_EXPIRES_IN=7d
 BCRYPT_ROUNDS=12
 
-# === SERVER CONFIGURATION ===
-PORT=5000
-NODE_ENV=development
-HOST=localhost
-
 # === FILE UPLOAD LIMITS ===
 MAX_FILE_SIZE=10485760        # 10MB
 MAX_IMAGE_SIZE=5242880        # 5MB
 UPLOAD_DIRECTORY=uploads
 
-# === RATE LIMITING ===
-RATE_LIMIT_WINDOW=15          # minutes
-RATE_LIMIT_MAX_REQUESTS=1000
-
-# === CORS CONFIGURATION ===
 ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000
 
 # === LOGGING ===
 LOG_LEVEL=info
 LOG_FILE=logs/resona.log
 ENABLE_REQUEST_LOGGING=true
-
-# === OPTIONAL FEATURES ===
-ENABLE_ANALYTICS=false
-ENABLE_FILE_COMPRESSION=true
 ENABLE_THUMBNAILS=true
 ```
 
-Create `frontend/.env`:
-```env
-# === API CONFIGURATION ===
-VITE_API_URL=http://localhost:5000
-VITE_API_TIMEOUT=10000
 
 # === APPLICATION SETTINGS ===
 VITE_APP_NAME=Resona Music Player
 VITE_APP_VERSION=1.0.0
 VITE_APP_DESCRIPTION=Professional Music Streaming Platform
-
-# === FEATURE FLAGS ===
-VITE_ENABLE_ANALYTICS=false
-VITE_ENABLE_DEBUG=true
-VITE_ENABLE_PWA=false
 
 # === UPLOAD CONFIGURATION ===
 VITE_MAX_FILE_SIZE=10485760
@@ -567,45 +537,11 @@ VITE_ALLOWED_AUDIO_FORMATS=.mp3,.wav,.flac,.m4a
 VITE_ALLOWED_IMAGE_FORMATS=.jpg,.jpeg,.png,.webp
 
 # === UI CONFIGURATION ===
-VITE_DEFAULT_THEME=glassmorphism
-VITE_ENABLE_ANIMATIONS=true
-VITE_SHOW_VISUALIZERS=true
-```
-
-**Step 6: Database Initialization**
-```bash
-cd backend
-node -e "
-const mongoose = require('mongoose');
-const User = require('./models/userModel');
-require('dotenv').config();
-
-(async () => {
-  await mongoose.connect(process.env.MONGO_URL);
-  
-  const testUser = new User({
-    username: 'testuser',
-    email: 'test@example.com', 
-    password: 'password123'
-  });
-  
-  await testUser.save();
-  console.log('✅ Test user created: test@example.com / password123');
-  process.exit(0);
-})();
-"
-```
-
-**Step 7: Launch Application**
+**Step 6: Launch Application**
 ```bash
 # Option 1: Run both servers simultaneously
 cd .. && npm run dev
 
-# Option 2: Separate terminals
-# Terminal 1 - Backend
-cd backend && npm run dev
-
-# Terminal 2 - Frontend  
 cd frontend && npm run dev
 ```
 
@@ -616,13 +552,11 @@ cd frontend && npm run dev
 Frontend Application:    http://localhost:3000
 Backend API:            http://localhost:5000  
 API Documentation:      http://localhost:5000/api-docs
-MongoDB Database:       mongodb://localhost:27017/resona
 ```
 
 **Test Account:**
 ```
-Email:    test@example.com
-Password: password123
+Note: Create your own account using the registration form
 ```
 
 ### **🔍 Verification Steps**
@@ -637,7 +571,7 @@ curl http://localhost:5000/health
 ```bash
 curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"password123"}'
+  -d '{"email":"your_email@example.com","password":"your_password"}'
 # Expected: {"success":true,"token":"...","user":{...}}
 ```
 

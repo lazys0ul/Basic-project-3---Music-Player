@@ -68,7 +68,7 @@ const MusicPlayer = () => {
             <div className="relative w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 shadow-lg hover-lift">
               {currentTrack.imageFilepath ? (
                 <img
-                  src={`${BACKEND_URL}/uploads/${currentTrack.imageFilepath.replace(/^uploads[/\\]/, '')}`}
+                  src={`${BACKEND_URL}/uploads/${currentTrack.imageFilepath}`}
                   alt={currentTrack.title}
                   className="w-full h-full object-cover"
                 />

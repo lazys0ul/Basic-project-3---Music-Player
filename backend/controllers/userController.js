@@ -231,8 +231,10 @@ const getMusic = async (req, res) => {
             .sort({ createdAt: -1 })
             .populate('uploadedBy', 'username')
             
+        // Return empty array if no music found instead of 404
         if (!music || music.length === 0) {
-            return res.status(404).json({ success: false, message: "No music found" })
+            logger.info('No music found in database', { search, artist })
+            return res.status(200).json({ success: true, message: "No music found", music: [] })
         }
 
         logger.info('Music retrieved', { count: music.length, search, artist })

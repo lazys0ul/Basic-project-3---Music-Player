@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="96" fill="url(#gradient)"/>
+  
+  <!-- Music note design -->
+  <g transform="translate(128, 128)">
+    <!-- Main music note shape -->
+    <path d="M64 96L192 64L256 96V224L192 256L64 224V96Z" fill="white" fill-opacity="0.95"/>
+    
+    <!-- Inner circle for record/CD look -->
+    <circle cx="160" cy="160" r="48" fill="url(#gradient2)"/>
+    <circle cx="160" cy="160" r="16" fill="white" fill-opacity="0.9"/>
+    
+    <!-- Musical staff lines -->
+    <line x1="20" y1="53" x2="280" y2="53" stroke="white" stroke-width="4" opacity="0.3"/>
+    <line x1="20" y1="85" x2="280" y2="85" stroke="white" stroke-width="4" opacity="0.3"/>
+    <line x1="20" y1="117" x2="280" y2="117" stroke="white" stroke-width="4" opacity="0.3"/>
+    
+    <!-- Sound waves -->
+    <path d="M294 107C320 85 320 181 294 160" stroke="white" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+    <path d="M315 93C354 59 354 208 315 173" stroke="white" stroke-width="8" stroke-linecap="round" opacity="0.4"/>
+    <path d="M336 79C384 32 384 235 336 187" stroke="white" stroke-width="8" stroke-linecap="round" opacity="0.2"/>
+  </g>
+  
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="0.5" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#EC4899"/>
+    </linearGradient>
+    <linearGradient id="gradient2" x1="112" y1="112" x2="208" y2="208" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#EF4444"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 import { useAuth } from '../../hooks/useAuth';
 import { 
   FaMusic, 
@@ -158,12 +157,6 @@ const Sidebar = ({ activeTab, setActiveTab, onClose }) => {
       </div>
     </div>
   );
-};
-
-Sidebar.propTypes = {
-  activeTab: PropTypes.string.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
 };
 
 export default memo(Sidebar);

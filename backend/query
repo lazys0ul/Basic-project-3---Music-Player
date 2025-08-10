@@ -1,0 +1,159 @@
+# MongoDB Queries for Resona Music Player
+
+## User Queries
+
+### Find all users
+```javascript
+db.users.find({})
+```
+
+### Find user by email
+```javascript
+db.users.findOne({ email: "user@example.com" })
+```
+
+### Count total users
+```javascript
+db.users.countDocuments({})
+```
+
+## Music Queries
+
+### Find all music tracks
+```javascript
+db.musics.find({})
+```
+
+### Find music by title (case insensitive)
+```javascript
+db.musics.find({ 
+  title: { $regex: "song title", $options: "i" } 
+})
+```
+
+### Find music by artist
+```javascript
+db.musics.find({ 
+  artist: { $regex: "artist name", $options: "i" } 
+})
+```
+
+### Find recent uploads (last 7 days)
+```javascript
+db.musics.find({
+  createdAt: {
+    $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  }
+}).sort({ createdAt: -1 })
+```
+
+### Count total tracks
+```javascript
+db.musics.countDocuments({})
+```
+
+### Find tracks by specific user
+```javascript
+db.musics.find({ uploadedBy: ObjectId("USER_ID_HERE") })
+```
+
+## Aggregation Queries
+
+### User statistics with upload counts
+```javascript
+db.users.aggregate([
+  {
+    $lookup: {
+      from: "musics",
+      localField: "_id",
+      foreignField: "uploadedBy",
+      as: "uploads"
+    }
+  },
+  {
+    $project: {
+      username: 1,
+      email: 1,
+      uploadCount: { $size: "$uploads" },
+      createdAt: 1
+    }
+  }
+])
+```
+
+### Most active uploaders
+```javascript
+db.musics.aggregate([
+  {
+    $group: {
+      _id: "$uploadedBy",
+      count: { $sum: 1 }
+    }
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "_id",
+      foreignField: "_id",
+      as: "user"
+    }
+  },
+  {
+    $unwind: "$user"
+  },
+  {
+    $project: {
+      username: "$user.username",
+      email: "$user.email",
+      uploadCount: "$count"
+    }
+  },
+  {
+    $sort: { uploadCount: -1 }
+  }
+])
+```
+
+### Search across title and artist
+```javascript
+db.musics.find({
+  $or: [
+    { title: { $regex: "search term", $options: "i" } },
+    { artist: { $regex: "search term", $options: "i" } }
+  ]
+})
+```
+
+## Maintenance Queries
+
+### Remove orphaned music files (no associated user)
+```javascript
+db.musics.find({ uploadedBy: { $exists: false } })
+```
+
+### Find duplicate tracks
+```javascript
+db.musics.aggregate([
+  {
+    $group: {
+      _id: { title: "$title", artist: "$artist" },
+      count: { $sum: 1 },
+      docs: { $push: "$_id" }
+    }
+  },
+  {
+    $match: { count: { $gt: 1 } }
+  }
+])
+```
+
+### Database statistics
+```javascript
+db.stats()
+```
+
+### Collection sizes
+```javascript
+db.users.stats()
+db.musics.stats()
+```

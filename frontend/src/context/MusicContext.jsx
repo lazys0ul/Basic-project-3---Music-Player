@@ -19,6 +19,46 @@ export const MusicProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const API_BASE = `${BACKEND_URL}/api`;
 
+  // Define playTrack first
+  const playTrack = useCallback(async (track, index) => {
+    setLoading(true);
+    const filename = track.filepath.replace(/^uploads[/\\]/, '').replace(/\\/g, '/');
+    const audioUrl = `${BACKEND_URL}/stream/${encodeURIComponent(filename)}`;
+    
+    try {
+      if (currentTrack && currentTrack._id === track._id && !audioRef.current.paused) {
+        // If same track is playing, just pause/resume
+        audioRef.current.pause();
+        setIsPlaying(false);
+        return;
+      }
+
+      setCurrentTrack(track);
+      setCurrentIndex(index);
+      
+      audioRef.current.src = audioUrl;
+      
+      await audioRef.current.load();
+      await audioRef.current.play();
+      setIsPlaying(true);
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Error playing track:', error);
+        console.error('Failed audio URL:', audioUrl);
+        console.error('Track filepath:', track.filepath);
+        console.error('Audio element state:', {
+          src: audioRef.current.src,
+          networkState: audioRef.current.networkState,
+          readyState: audioRef.current.readyState,
+          error: audioRef.current.error
+        });
+      }
+      toast.error(`Failed to play track: ${error.message}`);
+      setLoading(false);
+    }
+  }, [currentTrack, BACKEND_URL]);
+
+  // Now define playNext that uses playTrack
   const playNext = useCallback(() => {
     if (playlist.length === 0) return;
     
@@ -95,7 +135,7 @@ export const MusicProvider = ({ children }) => {
   const fetchMusic = useCallback(async (searchParams = {}) => {
     try {
       const params = new URLSearchParams(searchParams).toString()
-      const url = params ? `${API_BASE}/music/music?${params}` : `${API_BASE}/music/music`
+      const url = params ? `${API_BASE}/music?${params}` : `${API_BASE}/music`
       
       const response = await axios.get(url);
       
@@ -162,40 +202,6 @@ export const MusicProvider = ({ children }) => {
       return { success: false, message };
     }
   };
-
-  const playTrack = useCallback(async (track, index) => {
-    setLoading(true);
-    const filename = track.filepath.replace(/^uploads[/\\]/, '').replace(/\\/g, '/');
-    const audioUrl = `${BACKEND_URL}/stream/${encodeURIComponent(filename)}`;
-    
-    try {
-      if (currentTrack && currentTrack._id === track._id && !audioRef.current.paused) {
-        pause();
-        return;
-      }
-
-      setCurrentTrack(track);
-      setCurrentIndex(index);
-      
-      audioRef.current.src = audioUrl;
-      
-      await audioRef.current.load();
-      await audioRef.current.play();
-      setIsPlaying(true);
-    } catch (error) {
-      console.error('Error playing track:', error);
-      console.error('Failed audio URL:', audioUrl);
-      console.error('Track filepath:', track.filepath);
-      console.error('Audio element state:', {
-        src: audioRef.current.src,
-        networkState: audioRef.current.networkState,
-        readyState: audioRef.current.readyState,
-        error: audioRef.current.error
-      });
-      toast.error(`Failed to play track: ${error.message}`);
-      setLoading(false);
-    }
-  }, [currentTrack, BACKEND_URL]);
 
   // Play/pause current track
   const togglePlayPause = async () => {

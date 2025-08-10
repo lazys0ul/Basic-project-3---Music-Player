@@ -2,6 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fix webkit compatibility issues - Support both webkit and modern browsers */
+html, :host {
+  -webkit-text-size-adjust: 100%; /* Legacy webkit support */
+  -moz-text-size-adjust: 100%; /* Firefox support (where available) */
+  -ms-text-size-adjust: 100%; /* IE/Edge legacy support */
+  text-size-adjust: 100%; /* Modern standard for Chrome 54+, Edge 79+ */
+}
+
+/* Feature query for progressive enhancement of text-size-adjust */
+@supports (text-size-adjust: 100%) or (-webkit-text-size-adjust: 100%) {
+  html {
+    -webkit-text-size-adjust: 100%; /* Webkit browsers */
+    text-size-adjust: 100%; /* Modern browsers */
+  }
+}
+
+/* Browser-specific text rendering optimizations */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Override Toastify animations for better performance - remove all visibility triggers */
+@keyframes Toastify__slideInRight {
+  0% {
+    transform: translate3d(110%, 0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes Toastify__slideInLeft {
+  0% {
+    transform: translate3d(-110%, 0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes Toastify__slideInUp {
+  0% {
+    transform: translate3d(0, 110%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes Toastify__slideInDown {
+  0% {
+    transform: translate3d(0, -110%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+/* Override ALL Toastify animations to prevent visibility/layout triggers */
+@keyframes Toastify__slideOutRight {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(110%, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes Toastify__slideOutLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-110%, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes Toastify__slideOutUp {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, -110%, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes Toastify__slideOutDown {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 110%, 0);
+    opacity: 0;
+  }
+}
+
+/* Override any potential visibility-based animations */
+.Toastify__toast {
+  visibility: visible !important;
+}
+
+.Toastify__toast--enter {
+  animation-fill-mode: both;
+}
+
+.Toastify__toast--exit {
+  animation-fill-mode: both;
+}
+
 /* Prevent overscroll/rubber band effect */
 html, body {
   overscroll-behavior: none;
@@ -30,7 +156,7 @@ body {
   
   .prevent-bounce {
     overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
+    /* Removed -webkit-overflow-scrolling: touch; as it's deprecated in iOS 13+ */
   }
 }
 
@@ -418,11 +544,11 @@ input:focus, select:focus, textarea:focus {
 
 @keyframes musicBars {
   from {
-    height: 6px;
+    transform: scaleY(0.3);
     opacity: 0.5;
   }
   to {
-    height: 20px;
+    transform: scaleY(1);
     opacity: 1;
   }
 }

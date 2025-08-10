@@ -2,42 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO Meta Tags -->
-    <title>Resona - Professional Music Streaming Platform</title>
-    <meta name="description" content="Experience premium music streaming with Resona's glassmorphism UI, real-time visualizers, and enterprise-grade audio quality." />
-    <meta name="keywords" content="music player, streaming, audio, glassmorphism, web app, music library" />
+    <meta name="description" content="Resona - Your modern music streaming experience with glassmorphism design" />
+    <meta name="keywords" content="music, streaming, player, audio, resona" />
     <meta name="author" content="Resona Team" />
     
+    <!-- PWA Meta Tags - Progressive Enhancement -->
+    <!-- theme-color supported by Chrome, Safari, Edge (not Firefox - graceful degradation) -->
+    <meta name="theme-color" content="#1e1b4b" />
+    <meta name="msapplication-TileColor" content="#1e1b4b" />
+    <!-- Modern PWA capability tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Resona" />
+    
+    <!-- Firefox alternative: CSS custom properties for theme consistency -->
+    <style>
+      :root {
+        --theme-color: #1e1b4b;
+        --background-primary: #0f172a;
+      }
+    </style>
+    
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Resona - Professional Music Streaming Platform" />
-    <meta property="og:description" content="Premium music streaming with stunning glassmorphism UI and enterprise-grade features." />
+    <meta property="og:title" content="Resona - Music Player" />
+    <meta property="og:description" content="Your modern music streaming experience" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://resona-music.com" />
-    <meta property="og:image" content="/og-image.png" />
     
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Resona - Music Streaming Platform" />
-    <meta name="twitter:description" content="Premium music streaming with stunning glassmorphism UI." />
-    <meta name="twitter:image" content="/twitter-image.png" />
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" />
-    
-    <!-- Favicon and Icons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#8b5cf6" />
-    <meta name="msapplication-TileColor" content="#8b5cf6" />
-    
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <title>Resona - Music Player</title>
   </head>
   <body>
     <div id="root"></div>

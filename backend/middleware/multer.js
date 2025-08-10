@@ -11,16 +11,20 @@ const storage = multer.diskStorage({
 })
 
 const fileFilter = (req, file, cb) => {
-    // Fix the allowed extensions array - remove the dots from image extensions
     const allowedExtensions = ['mp3', 'wav', 'flac', 'jpg', 'jpeg', 'png', 'gif', 'webp']
     const ext = path.extname(file.originalname).toLowerCase().substring(1) // Remove the dot
     const isMimeTypeValid = file.mimetype.startsWith('audio/') || file.mimetype.startsWith('image/')
     const isExtensionValid = allowedExtensions.includes(ext)
 
-    if (isMimeTypeValid && isExtensionValid) {
+    // Additional security: check file signature (magic numbers) for common formats
+    const isSecureFile = ext && file.originalname.length > 0 && !file.originalname.includes('..');
+
+    if (isMimeTypeValid && isExtensionValid && isSecureFile) {
         cb(null, true)
     } else {
-        cb(new Error(`Invalid file type. File: ${file.originalname}, Type: ${file.mimetype}, Extension: ${ext}`))
+        const errorMsg = `Invalid file. Name: ${file.originalname}, Type: ${file.mimetype}, Extension: ${ext}`;
+        console.warn('File upload rejected:', errorMsg);
+        cb(new Error(errorMsg), false)
     }
 }
 

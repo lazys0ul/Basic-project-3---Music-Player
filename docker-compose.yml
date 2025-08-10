@@ -9,9 +9,10 @@ services:
     ports:
       - "3000:80"
     environment:
-      - VITE_API_URL=http://localhost:5000
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:5000}
     depends_on:
       - backend
+    restart: unless-stopped
 
   # Backend API
   backend:
@@ -21,14 +22,25 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - NODE_ENV=production
-      - MONGO_URL=mongodb://mongodb:27017/resona
+      - NODE_ENV=${NODE_ENV:-production}
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=${DB_NAME:-resona}
       - JWT_SECRET=${JWT_SECRET}
       - PORT=5000
+      - BCRYPT_ROUNDS=${BCRYPT_ROUNDS:-12}
+      - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-15}
+      - RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS:-100}
     volumes:
       - ./backend/uploads:/app/uploads
+      - ./backend/logs:/app/logs
     depends_on:
       - mongodb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/health"]
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # MongoDB Database
   mongodb:

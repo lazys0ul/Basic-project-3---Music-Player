@@ -12,13 +12,45 @@ export const AuthProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const API_BASE = `${BACKEND_URL}/api`;
 
-  // Set up axios defaults
+  // Set up axios defaults and interceptors
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
       delete axios.defaults.headers.common['Authorization'];
     }
+
+    // Request interceptor
+    const requestInterceptor = axios.interceptors.request.use(
+      (config) => {
+        config.timeout = 10000; // 10 second timeout
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    // Response interceptor for error handling
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          // Token expired or invalid
+          logout();
+          toast.error('Session expired. Please log in again.');
+        } else if (error.code === 'ECONNABORTED') {
+          toast.error('Request timeout. Please check your connection.');
+        } else if (!error.response) {
+          toast.error('Network error. Please check your connection.');
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup interceptors
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
   }, [token]);
 
   const isAuthenticated = !!token && !!user;

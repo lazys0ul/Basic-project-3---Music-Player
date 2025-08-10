@@ -97,27 +97,13 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Demo Credentials Helper */}
-            <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
-              <h3 className="text-blue-400 font-medium mb-2">🔑 Demo Credentials</h3>
-              <p className="text-sm text-gray-300 mb-2">Use these credentials to test the app:</p>
-              <div className="text-sm font-mono bg-gray-800/50 rounded-lg p-3">
-                <div className="text-green-400">Email: test@example.com</div>
-                <div className="text-green-400">Password: password123</div>
+            {/* Development Notice */}
+            {import.meta.env.DEV && (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">
+                <h3 className="text-yellow-400 font-medium mb-2">⚠️ Development Mode</h3>
+                <p className="text-sm text-gray-300">Create an account or use your own credentials to login.</p>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData({
-                    email: 'test@example.com',
-                    password: 'password123'
-                  });
-                }}
-                className="mt-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                Click to auto-fill →
-              </button>
-            </div>
+            )}
 
             {/* Enhanced Email Field */}
             <div>

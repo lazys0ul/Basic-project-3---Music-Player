@@ -3,10 +3,12 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
+import mongoose from 'mongoose'
 import connectDB from './config/mongoDB.js'
 import authRouter from './routes/authRoutes.js'
 import musicRouter from './routes/musicRoutes.js'
 import validateEnvironment from './utils/validateEnv.js'
+import requestLogger from './middleware/requestLogger.js'
 import path from 'path'
 
 dotenv.config()
@@ -45,6 +47,13 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  
+  // Remove server info in production
+  if (process.env.NODE_ENV === 'production') {
+    res.removeHeader('X-Powered-By');
+    res.setHeader('Server', '');
+  }
+  
   next();
 });
 
@@ -60,8 +69,24 @@ app.use('/api/', limiter)
 app.use(express.json({ limit: '1mb' })) // Reduced from 10mb
 app.use(express.urlencoded({ extended: true, limit: '1mb' })) // Reduced from 10mb
 
+// Security request logging
+app.use(requestLogger)
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001'],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = process.env.ALLOWED_ORIGINS 
+      ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+      : ['http://localhost:3000'];
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS policy'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Range', 'Accept', 'Accept-Ranges'],
@@ -191,21 +216,29 @@ connectDB()
         const server = app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`)
             console.log(`📁 Static files served from: ${path.join(path.resolve(), 'uploads')}`)
-            console.log(`🌐 CORS enabled for: http://localhost:3000`)
+            
+            // Show CORS origins in development only
+            if (process.env.NODE_ENV !== 'production') {
+                const origins = process.env.ALLOWED_ORIGINS || 'http://localhost:3000';
+                console.log(`🌐 CORS enabled for: ${origins.split(',')[0]}${origins.includes(',') ? ' and others' : ''}`);
+            }
         })
         
-        // Set server timeout to 30 seconds
+        // Set server timeout to 30 seconds for regular requests
         server.timeout = 30000;
+        
+        // Set keep-alive timeout
+        server.keepAliveTimeout = 65000;
+        server.headersTimeout = 66000;
         
         // Graceful shutdown handling
         const gracefulShutdown = (signal) => {
             console.log(`\n${signal} received. Shutting down gracefully...`)
-            server.close(() => {
+            server.close(async () => {
                 console.log('HTTP server closed.')
-                mongoose.connection.close(false, () => {
-                    console.log('MongoDB connection closed.')
-                    process.exit(0)
-                })
+                await mongoose.connection.close()
+                console.log('MongoDB connection closed.')
+                process.exit(0)
             })
         }
         

@@ -7,7 +7,7 @@ import upload from '../middleware/multer.js'
 const musicRouter = express.Router()
 
 // Public routes with optional auth context
-musicRouter.get('/music', optionalAuth, getMusic) 
+musicRouter.get('/', optionalAuth, getMusic) 
 
 // Protected routes (authentication required) with validation
 musicRouter.post('/add-music', 

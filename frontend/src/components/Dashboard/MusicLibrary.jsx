@@ -124,6 +124,8 @@ const MusicLibrary = () => {
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
             className="px-4 py-3 bg-gray-800/50 border border-gray-600/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white backdrop-blur-sm"
+            aria-label="Sort music by"
+            title="Sort music by"
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
@@ -155,7 +157,7 @@ const MusicLibrary = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl overflow-hidden shadow-lg">
                     {track.imageFilepath ? (
                       <img
-                        src={`${BACKEND_URL}/${track.imageFilepath}`}
+                        src={`${BACKEND_URL}/uploads/${track.imageFilepath}`}
                         alt={track.title}
                         className="w-full h-full object-cover"
                       />
@@ -168,6 +170,8 @@ const MusicLibrary = () => {
                   <button
                     onClick={() => handlePlayTrack(track, index)}
                     className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center rounded-xl backdrop-blur-sm"
+                    aria-label={isCurrentlyPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
+                    title={isCurrentlyPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
                   >
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
                       {isCurrentlyPlaying ? (
@@ -215,6 +219,7 @@ const MusicLibrary = () => {
                   <button
                     className="p-3 text-gray-400 hover:text-red-400 transition-all duration-200 rounded-xl hover:bg-red-400/10"
                     title="Like"
+                    aria-label={`Like ${track.title}`}
                   >
                     <FaHeart size={16} />
                   </button>
@@ -225,6 +230,7 @@ const MusicLibrary = () => {
                     download
                     className="p-3 text-gray-400 hover:text-blue-400 transition-all duration-200 rounded-xl hover:bg-blue-400/10"
                     title="Download"
+                    aria-label={`Download ${track.title}`}
                   >
                     <FaDownload size={16} />
                   </a>
@@ -234,6 +240,7 @@ const MusicLibrary = () => {
                     onClick={() => handleDeleteTrack(track._id, track.title)}
                     className="p-3 text-gray-400 hover:text-red-400 transition-all duration-200 rounded-xl hover:bg-red-400/10"
                     title="Delete"
+                    aria-label={`Delete ${track.title}`}
                   >
                     <FaTrash size={16} />
                   </button>

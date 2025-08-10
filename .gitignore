@@ -32,12 +32,24 @@ dist
 
 # Environment files (comprehensive coverage)
 .env
+.env.*
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 *token.json*
 *credentials.json*
+*secret*
+*private*
+*key.pem
+*cert.pem
+
+# Security sensitive files
+secrets/
+keys/
+certs/
+.secrets
+.keys
 
 # Uploads folder (ignore uploaded content but keep structure)
 backend/uploads/*

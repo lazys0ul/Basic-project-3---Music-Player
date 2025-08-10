@@ -80,23 +80,23 @@ const Login = () => {
         </div>
       </div>
       
-      <div className="relative z-10 max-w-md w-full mx-4 scale-in">
-        <div className="glass-card rounded-3xl shadow-2xl p-8 border border-gray-600/30 hover-lift">
+      <div className="relative z-10 max-w-sm w-full mx-4 scale-in">
+        <div className="glass-card rounded-2xl shadow-2xl p-6 border border-gray-600/30 hover-lift">
           {/* Enhanced Logo and Title */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center mb-6 relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg float">
-                <ResonaLogo size={48} />
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center mb-4 relative">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg float">
+                <ResonaLogo size={40} />
               </div>
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl"></div>
             </div>
-            <h1 className="text-4xl font-bold gradient-text mb-3">
+            <h1 className="text-2xl font-bold gradient-text mb-2">
               Welcome Back
             </h1>
-            <p className="text-gray-400 text-lg">Sign in to your music universe</p>
+            <p className="text-gray-400 text-sm">Sign in to your music universe</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Development Notice */}
             {import.meta.env.DEV && (
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">

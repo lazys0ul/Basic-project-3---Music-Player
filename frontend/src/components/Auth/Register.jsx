@@ -80,7 +80,7 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
       <div className="absolute inset-0 bg-black opacity-50"></div>
       
-      <div className="relative z-10 max-w-md w-full mx-4">
+      <div className="relative z-10 max-w-sm w-full mx-4">
         <div className="bg-gray-900/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-700">
           {/* Logo and Title */}
           <div className="text-center mb-8">

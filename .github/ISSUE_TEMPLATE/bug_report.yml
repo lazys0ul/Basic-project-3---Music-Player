@@ -1,0 +1,157 @@
+name: 🎵 Bug Report
+description: Report a bug or issue with Resona Music Platform
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: ["lazys0ul"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 🐛
+
+  - type: input
+    id: summary
+    attributes:
+      label: Bug Summary
+      description: A brief description of the bug
+      placeholder: e.g., Music player doesn't play audio files
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Detailed description of the bug
+      placeholder: |
+        Please provide a clear and detailed description of the bug.
+        Include what you were doing when the bug occurred.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this bug?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe what you expected to see
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what you actually saw
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser are you using?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device Type
+      description: What device are you using?
+      options:
+        - Desktop
+        - Mobile (iOS)
+        - Mobile (Android)
+        - Tablet
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Additional environment information
+      placeholder: |
+        - OS: [e.g., Windows 11, macOS 12.0, Ubuntu 20.04]
+        - Browser version: [e.g., Chrome 91.0.4472.124]
+        - Screen resolution: [e.g., 1920x1080]
+        - Any other relevant details
+
+  - type: textarea
+    id: console-errors
+    attributes:
+      label: Console Errors
+      description: Any errors in the browser console?
+      placeholder: |
+        If you see any errors in the developer console (F12), 
+        please paste them here.
+      render: javascript
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Add screenshots if applicable
+      placeholder: |
+        You can paste screenshots directly here or drag and drop them.
+        Screenshots help us understand the issue better!
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues to make sure this bug hasn't been reported already
+          required: true
+        - label: I have provided all the requested information
+          required: true
+        - label: I can reproduce this bug consistently
+          required: false
+        - label: This bug affects other users (not just me)
+          required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How would you rate the priority of this bug?
+      options:
+        - Low - Minor issue that doesn't affect core functionality
+        - Medium - Issue affects some functionality but has workarounds
+        - High - Issue significantly affects functionality
+        - Critical - Issue completely breaks core functionality
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Anything else we should know?
+      placeholder: |
+        Add any other context, suggestions, or information that might be helpful.
+        Include any workarounds you may have found.

@@ -1,0 +1,181 @@
+name: ✨ Feature Request
+description: Suggest a new feature for Resona Music Platform
+title: "[FEATURE] "
+labels: ["enhancement", "feature-request"]
+assignees: ["lazys0ul"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! 🌟
+        
+        Your ideas help make Resona better for everyone!
+
+  - type: input
+    id: feature-title
+    attributes:
+      label: Feature Title
+      description: A brief title for your feature request
+      placeholder: e.g., Add playlist sharing functionality
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: |
+        Describe the problem or need that this feature would address.
+        e.g., "Currently, users can't share their playlists with friends..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How would you like this feature to work?
+      placeholder: |
+        Describe your ideal solution in detail.
+        Be specific about the user experience and functionality.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative approaches?
+      placeholder: |
+        Describe any alternative solutions or features you've considered.
+        This helps us understand the full scope of possibilities.
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Category
+      description: What type of feature is this?
+      options:
+        - Music Player - Playback functionality
+        - User Interface - UI/UX improvements
+        - Social Features - Sharing and collaboration
+        - Music Management - Library and organization
+        - Authentication - User accounts and security
+        - Performance - Speed and optimization
+        - Mobile Experience - Mobile-specific features
+        - API/Integration - External service integration
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: Target Users
+      description: Who would benefit from this feature?
+      options:
+        - All users
+        - New users
+        - Power users
+        - Mobile users
+        - Desktop users
+        - Developers/Integrators
+        - Administrators
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Platforms
+      description: Which platforms should this feature support?
+      options:
+        - label: Desktop Web
+        - label: Mobile Web
+        - label: iOS (future)
+        - label: Android (future)
+        - label: All platforms
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Examples
+      description: Do you have any mockups, wireframes, or examples?
+      placeholder: |
+        You can paste images directly here or provide links to examples
+        from other applications that implement similar features.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have, but not essential
+        - Medium - Would improve user experience significantly
+        - High - Important for core functionality
+        - Critical - Essential for widespread adoption
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Implementation Complexity (if known)
+      description: How complex do you think this feature would be to implement?
+      options:
+        - I don't know
+        - Simple - Small UI changes or additions
+        - Medium - New functionality with moderate complexity
+        - Complex - Major feature requiring significant development
+        - Very Complex - Fundamental changes to architecture
+
+  - type: textarea
+    id: user-stories
+    attributes:
+      label: User Stories
+      description: Can you write user stories for this feature?
+      placeholder: |
+        Example format:
+        - As a music lover, I want to create public playlists so that I can share my music taste with friends
+        - As a mobile user, I want offline playback so that I can listen to music without internet
+        - As a power user, I want keyboard shortcuts so that I can control playback efficiently
+
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: Requirements Checklist
+      options:
+        - label: This feature aligns with Resona's mission as a music platform
+        - label: This feature would benefit multiple users, not just myself
+        - label: I have searched existing issues to ensure this hasn't been requested
+        - label: I am willing to provide feedback during development
+        - label: I would be interested in helping test this feature
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Anything else we should consider?
+      placeholder: |
+        Include any additional context, constraints, or considerations:
+        - Technical requirements or limitations
+        - Integration with existing features  
+        - Privacy or security considerations
+        - Accessibility requirements
+        - Any other relevant information
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        **Thank you for your feature request! 🎵**
+        
+        We review all feature requests and consider them for future releases. 
+        Popular requests with strong use cases are prioritized higher.
+        
+        Feel free to upvote similar existing requests or add additional comments 
+        to this issue once it's created.

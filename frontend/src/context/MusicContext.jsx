@@ -21,42 +21,77 @@ export const MusicProvider = ({ children }) => {
 
   // Define playTrack first
   const playTrack = useCallback(async (track, index) => {
+    if (!track || !track.filepath) {
+      toast.error('Invalid track data');
+      return;
+    }
+    
     setLoading(true);
-    const filename = track.filepath.replace(/^uploads[/\\]/, '').replace(/\\/g, '/');
-    const audioUrl = `${BACKEND_URL}/stream/${encodeURIComponent(filename)}`;
     
     try {
-      if (currentTrack && currentTrack._id === track._id && !audioRef.current.paused) {
-        // If same track is playing, just pause/resume
-        audioRef.current.pause();
-        setIsPlaying(false);
+      // Clean the filename properly
+      const filename = track.filepath.replace(/^uploads[/\\]/, '').replace(/\\/g, '/');
+      const audioUrl = `${BACKEND_URL}/stream/${encodeURIComponent(filename)}`;
+      
+      // If same track is playing, just toggle play/pause
+      if (currentTrack && currentTrack._id === track._id) {
+        if (!audioRef.current.paused) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        }
+        setLoading(false);
         return;
+      }
+
+      // Stop current audio if playing
+      if (audioRef.current.src) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
 
       setCurrentTrack(track);
       setCurrentIndex(index);
+      setCurrentTime(0);
       
+      // Set up the audio source
       audioRef.current.src = audioUrl;
+      audioRef.current.volume = volume;
       
-      await audioRef.current.load();
+      // Wait for audio to be ready
+      await new Promise((resolve, reject) => {
+        const handleCanPlay = () => {
+          audioRef.current.removeEventListener('canplay', handleCanPlay);
+          audioRef.current.removeEventListener('error', handleError);
+          resolve();
+        };
+        
+        const handleError = () => {
+          audioRef.current.removeEventListener('canplay', handleCanPlay);
+          audioRef.current.removeEventListener('error', handleError);
+          reject(new Error(audioRef.current.error?.message || 'Failed to load audio'));
+        };
+        
+        audioRef.current.addEventListener('canplay', handleCanPlay);
+        audioRef.current.addEventListener('error', handleError);
+        audioRef.current.load();
+      });
+      
+      // Play the audio
       await audioRef.current.play();
       setIsPlaying(true);
+      
     } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Error playing track:', error);
-        console.error('Failed audio URL:', audioUrl);
-        console.error('Track filepath:', track.filepath);
-        console.error('Audio element state:', {
-          src: audioRef.current.src,
-          networkState: audioRef.current.networkState,
-          readyState: audioRef.current.readyState,
-          error: audioRef.current.error
-        });
-      }
-      toast.error(`Failed to play track: ${error.message}`);
+      console.error('Playback error:', error);
+      toast.error(`Failed to play "${track.title}": ${error.message}`);
+      setIsPlaying(false);
+      setCurrentTrack(null);
+    } finally {
       setLoading(false);
     }
-  }, [currentTrack, BACKEND_URL]);
+  }, [currentTrack, BACKEND_URL, volume]);
 
   // Now define playNext that uses playTrack
   const playNext = useCallback(() => {

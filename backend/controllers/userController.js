@@ -2,7 +2,6 @@ import userModel from "../models/userModel.js"
 import musicModel from "../models/musicModel.js"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import path from 'path'
 import fs from 'fs'
 import logger from '../utils/logger.js'
 

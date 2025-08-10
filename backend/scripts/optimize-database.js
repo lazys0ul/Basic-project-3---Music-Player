@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import connectDB from '../config/mongoDB.js';
 import userModel from '../models/userModel.js';
 import musicModel from '../models/musicModel.js';

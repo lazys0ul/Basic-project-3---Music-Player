@@ -1,6 +1,7 @@
 import logger from '../utils/logger.js';
 
 // Global error handler middleware
+// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   // Log error details
   logger.error('Error occurred', {

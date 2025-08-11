@@ -217,13 +217,13 @@ app.use('*', (req, res) => {
 connectDB()
     .then(() => {
         const server = app.listen(PORT, () => {
-            console.log(`🚀 Server running on port ${PORT}`)
-            console.log(`📁 Static files served from: ${path.join(path.resolve(), 'uploads')}`)
+            console.log(`Server running on port ${PORT}`)
+            console.log(`Static files served from: ${path.join(path.resolve(), 'uploads')}`)
             
             // Show CORS origins in development only
             if (process.env.NODE_ENV !== 'production') {
                 const origins = process.env.ALLOWED_ORIGINS || 'http://localhost:3000';
-                console.log(`🌐 CORS enabled for: ${origins.split(',')[0]}${origins.includes(',') ? ' and others' : ''}`);
+                console.log(`CORS enabled for: ${origins.split(',')[0]}${origins.includes(',') ? ' and others' : ''}`);
             }
         })
         

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaMusic, FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import { ResonaLogo } from '../../assets/resona-brand.jsx';
 
 const Register = () => {
@@ -77,122 +77,170 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden py-8">
+      {/* Enhanced background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900/30 to-gray-900"></div>
       
-      <div className="relative z-10 max-w-sm w-full mx-4">
-        <div className="bg-gray-900/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-700">
-          {/* Logo and Title */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center mb-4">
-              <ResonaLogo size={64} />
+      {/* Floating music notes decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-16 left-16 w-4 h-4 text-purple-500/20 animate-pulse">
+          <FaMusic />
+        </div>
+        <div className="absolute top-32 right-24 w-6 h-6 text-pink-500/20 animate-pulse" style={{animationDelay: '1s'}}>
+          <FaMusic />
+        </div>
+        <div className="absolute bottom-28 left-24 w-5 h-5 text-blue-500/20 animate-pulse" style={{animationDelay: '2s'}}>
+          <FaMusic />
+        </div>
+        <div className="absolute bottom-16 right-16 w-4 h-4 text-purple-500/20 animate-pulse" style={{animationDelay: '3s'}}>
+          <FaMusic />
+        </div>
+      </div>
+      
+      <div className="relative z-10 max-w-xs w-full mx-4 scale-in">
+        <div className="glass-card rounded-2xl shadow-2xl p-5 border border-gray-600/30 hover-lift">
+          {/* Enhanced Logo and Title */}
+          <div className="text-center mb-5">
+            <div className="inline-flex items-center justify-center mb-3 relative">
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg float">
+                <ResonaLogo size={36} />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl"></div>
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-              Resona
+            <h1 className="text-xl font-bold gradient-text mb-1">
+              Join Resona
             </h1>
-            <p className="text-gray-400">Join the Ultimate Music Platform</p>
+            <p className="text-gray-400 text-xs">Create your music universe</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {/* Username Field */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="username" className="block text-xs font-medium text-gray-300 mb-1.5">
                 Username
               </label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 ${
-                  errors.username ? 'border-red-500' : 'border-gray-600'
-                }`}
-                placeholder="Enter your username"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaUser className="text-gray-400 text-sm" />
+                </div>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className={`w-full pl-10 pr-3 py-3 bg-gray-800/50 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 backdrop-blur-sm touch-manipulation text-sm ${
+                    errors.username ? 'border-red-500' : 'border-gray-600/50'
+                  }`}
+                  placeholder="Enter your username"
+                />
+              </div>
               {errors.username && (
-                <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+                <p className="mt-1.5 text-xs text-red-400 flex items-center">
+                  <span className="w-3 h-3 mr-1">⚠</span>
+                  {errors.username}
+                </p>
               )}
             </div>
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-xs font-medium text-gray-300 mb-1.5">
                 Email Address
               </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 ${
-                  errors.email ? 'border-red-500' : 'border-gray-600'
-                }`}
-                placeholder="Enter your email"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaEnvelope className="text-gray-400 text-sm" />
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full pl-10 pr-3 py-3 bg-gray-800/50 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 backdrop-blur-sm touch-manipulation text-sm ${
+                    errors.email ? 'border-red-500' : 'border-gray-600/50'
+                  }`}
+                  placeholder="Enter your email"
+                />
+              </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                <p className="mt-1.5 text-xs text-red-400 flex items-center">
+                  <span className="w-3 h-3 mr-1">⚠</span>
+                  {errors.email}
+                </p>
               )}
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-xs font-medium text-gray-300 mb-1.5">
                 Password
               </label>
               <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400 text-sm" />
+                </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-12 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 ${
-                    errors.password ? 'border-red-500' : 'border-gray-600'
+                  className={`w-full pl-10 pr-10 py-3 bg-gray-800/50 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 backdrop-blur-sm touch-manipulation text-sm ${
+                    errors.password ? 'border-red-500' : 'border-gray-600/50'
                   }`}
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition-colors"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-600/50 active:scale-95 touch-manipulation"
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? <FaEyeSlash className="text-sm" /> : <FaEye className="text-sm" />}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p className="mt-1.5 text-xs text-red-400 flex items-center">
+                  <span className="w-3 h-3 mr-1">⚠</span>
+                  {errors.password}
+                </p>
               )}
             </div>
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="confirmPassword" className="block text-xs font-medium text-gray-300 mb-1.5">
                 Confirm Password
               </label>
               <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400 text-sm" />
+                </div>
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-12 bg-gray-800 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-600'
+                  className={`w-full pl-10 pr-10 py-3 bg-gray-800/50 border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 backdrop-blur-sm touch-manipulation text-sm ${
+                    errors.confirmPassword ? 'border-red-500' : 'border-gray-600/50'
                   }`}
                   placeholder="Confirm your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition-colors"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-600/50 active:scale-95 touch-manipulation"
                 >
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
+                <p className="mt-2 text-sm text-red-400 flex items-center">
+                  <span className="w-4 h-4 mr-1">⚠</span>
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
 
@@ -200,11 +248,11 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-4 rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full neo-button py-4 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {loading ? (
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="loading-spinner w-6 h-6 mr-2"></div>
                   Creating account...
                 </div>
               ) : (
@@ -213,17 +261,23 @@ const Register = () => {
             </button>
           </form>
 
-          {/* Sign In Link */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-400">
-              Already have an account?{' '}
-              <Link
-                to="/login"
-                className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
-              >
-                Sign in
-              </Link>
-            </p>
+          {/* Enhanced Footer */}
+          <div className="mt-8 text-center">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-3 bg-transparent text-gray-400">Already have an account?</span>
+              </div>
+            </div>
+            
+            <Link
+              to="/login"
+              className="mt-3 inline-block text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200 text-sm"
+            >
+              Sign in instead →
+            </Link>
           </div>
         </div>
       </div>

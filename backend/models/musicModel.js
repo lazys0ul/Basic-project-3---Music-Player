@@ -41,7 +41,15 @@ const musicSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
-    }
+    },
+    isPublic: {
+        type: Boolean,
+        default: true // Public by default for library browsing
+    },
+    tags: [{
+        type: String,
+        trim: true
+    }]
 }, {timestamps: true})
 
 // Add indexes for better performance

@@ -3,6 +3,7 @@ import musicModel from "../models/musicModel.js"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
+import path from 'path'
 import logger from '../utils/logger.js'
 
 // Input validation helpers
@@ -122,6 +123,9 @@ const login = async (req, res) => {
             role: user.role
         }
 
+        // Update last login
+        await userModel.findByIdAndUpdate(user._id, { lastLogin: new Date() })
+
         res.status(200).json({ success: true, message: "User logged in successfully", user: userResponse, token })
 
     } catch (error) {
@@ -183,7 +187,7 @@ const uploadMusic = async (req, res) => {
             title: title.trim(),
             artist: artist.trim(),
             filepath: filePath,
-            imageFilepath: imageFilePath,
+            imageFilepath: path.basename(imageFilePath), // Store only the filename
             uploadedBy: req.user.id, // Track who uploaded
             fileSize: musicFile.size,
             duration: null // Could be populated later with metadata
@@ -237,6 +241,15 @@ const getMusic = async (req, res) => {
         }
 
         logger.info('Music retrieved', { count: music.length, search, artist })
+        
+        // Debug: Log the first track's image path
+        if (music.length > 0) {
+            logger.info('Sample track image path', { 
+                title: music[0].title, 
+                imageFilepath: music[0].imageFilepath 
+            })
+        }
+        
         res.status(200).json({ success: true, message: "Music retrieved successfully", music })
 
     } catch (error) {
@@ -253,6 +266,14 @@ const deleteMusic = async (req, res) => {
         const music = await musicModel.findById(id);
         if (!music) {
             return res.status(404).json({ success: false, message: "Music not found" })
+        }
+
+        // Check ownership or admin rights
+        if (req.user.role !== 'admin' && music.uploadedBy.toString() !== req.user.id) {
+            return res.status(403).json({ 
+                success: false, 
+                message: "You can only delete your own uploads" 
+            })
         }
 
         // Delete files from disk
@@ -275,7 +296,7 @@ const deleteMusic = async (req, res) => {
         // Delete from database
         await musicModel.findByIdAndDelete(id);
 
-        logger.info('Music deleted successfully', { musicId: id, title: music.title })
+        logger.info('Music deleted successfully', { musicId: id, title: music.title, deletedBy: req.user.username })
         res.status(200).json({ success: true, message: "Music deleted successfully", music })
 
     } catch (error) {
@@ -285,4 +306,188 @@ const deleteMusic = async (req, res) => {
     }
 }
 
-export { register, login, uploadMusic, getMusic, deleteMusic }
+// Admin Controllers
+const getAllUsers = async (req, res) => {
+    try {
+        const { page = 1, limit = 10, search = '' } = req.query
+        
+        let query = {}
+        if (search) {
+            query = {
+                $or: [
+                    { username: { $regex: search, $options: 'i' } },
+                    { email: { $regex: search, $options: 'i' } }
+                ]
+            }
+        }
+
+        const users = await userModel
+            .find(query)
+            .select('-password')
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .sort({ createdAt: -1 })
+
+        const totalUsers = await userModel.countDocuments(query)
+
+        res.status(200).json({
+            success: true,
+            users,
+            pagination: {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                total: totalUsers,
+                pages: Math.ceil(totalUsers / parseInt(limit))
+            }
+        })
+
+    } catch (error) {
+        logger.error('Get all users failed', { error: error.message })
+        res.status(500).json({ success: false, message: "Internal server error" })
+    }
+}
+
+const updateUserRole = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { role } = req.body
+
+        if (!['user', 'admin'].includes(role)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Invalid role. Must be 'user' or 'admin'" 
+            })
+        }
+
+        // Prevent admin from demoting themselves
+        if (req.user.id === id && role === 'user') {
+            return res.status(400).json({ 
+                success: false, 
+                message: "You cannot demote yourself" 
+            })
+        }
+
+        const user = await userModel.findByIdAndUpdate(
+            id, 
+            { role }, 
+            { new: true }
+        ).select('-password')
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" })
+        }
+
+        logger.info('User role updated', { 
+            userId: id, 
+            newRole: role, 
+            updatedBy: req.user.username 
+        })
+
+        res.status(200).json({ 
+            success: true, 
+            message: "User role updated successfully", 
+            user 
+        })
+
+    } catch (error) {
+        logger.error('Update user role failed', { error: error.message })
+        res.status(500).json({ success: false, message: "Internal server error" })
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        // Prevent admin from deleting themselves
+        if (req.user.id === id) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "You cannot delete your own account" 
+            })
+        }
+
+        const user = await userModel.findById(id)
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" })
+        }
+
+        // Delete user's music files
+        const userMusic = await musicModel.find({ uploadedBy: id })
+        for (const music of userMusic) {
+            try {
+                if (music.filepath && fs.existsSync(music.filepath)) {
+                    fs.unlinkSync(music.filepath)
+                }
+                if (music.imageFilepath && fs.existsSync(music.imageFilepath)) {
+                    fs.unlinkSync(music.imageFilepath)
+                }
+            } catch (fileError) {
+                logger.warn('Failed to delete user music files', { 
+                    error: fileError.message, 
+                    musicId: music._id 
+                })
+            }
+        }
+
+        // Delete user's music records
+        await musicModel.deleteMany({ uploadedBy: id })
+        
+        // Delete user account
+        await userModel.findByIdAndDelete(id)
+
+        logger.info('User deleted successfully', { 
+            userId: id, 
+            username: user.username, 
+            deletedBy: req.user.username 
+        })
+
+        res.status(200).json({ 
+            success: true, 
+            message: "User and their content deleted successfully" 
+        })
+
+    } catch (error) {
+        logger.error('Delete user failed', { error: error.message })
+        res.status(500).json({ success: false, message: "Internal server error" })
+    }
+}
+
+const getAdminStats = async (req, res) => {
+    try {
+        const [totalUsers, totalMusic, totalAdmins, recentUsers] = await Promise.all([
+            userModel.countDocuments(),
+            musicModel.countDocuments(),
+            userModel.countDocuments({ role: 'admin' }),
+            userModel.find()
+                .select('-password')
+                .sort({ createdAt: -1 })
+                .limit(5)
+        ])
+
+        const stats = {
+            totalUsers,
+            totalMusic,
+            totalAdmins,
+            recentUsers
+        }
+
+        res.status(200).json({ success: true, stats })
+
+    } catch (error) {
+        logger.error('Get admin stats failed', { error: error.message })
+        res.status(500).json({ success: false, message: "Internal server error" })
+    }
+}
+
+export { 
+    register, 
+    login, 
+    uploadMusic, 
+    getMusic, 
+    deleteMusic,
+    getAllUsers,
+    updateUserRole,
+    deleteUser,
+    getAdminStats
+}

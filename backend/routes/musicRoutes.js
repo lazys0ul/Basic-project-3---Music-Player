@@ -1,6 +1,6 @@
 import express from 'express'
 import { uploadMusic, getMusic, deleteMusic } from '../controllers/userController.js'
-import { authenticateToken, optionalAuth } from '../middleware/auth.js'
+import { authenticateToken, optionalAuth, requireOwnershipOrAdmin } from '../middleware/auth.js'
 import { validateMusicUpload } from '../middleware/validation.js'
 import upload from '../middleware/multer.js'
 
@@ -19,6 +19,7 @@ musicRouter.post('/add-music',
 
 musicRouter.delete('/delete-music/:id', 
     authenticateToken, 
+    requireOwnershipOrAdmin,
     deleteMusic
 ) 
 

@@ -80,39 +80,39 @@ const Login = () => {
         </div>
       </div>
       
-      <div className="relative z-10 max-w-sm w-full mx-4 scale-in">
-        <div className="glass-card rounded-2xl shadow-2xl p-6 border border-gray-600/30 hover-lift">
+      <div className="relative z-10 max-w-xs w-full mx-4 scale-in">
+        <div className="glass-card rounded-2xl shadow-2xl p-5 border border-gray-600/30 hover-lift">
           {/* Enhanced Logo and Title */}
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center mb-4 relative">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg float">
-                <ResonaLogo size={40} />
+          <div className="text-center mb-5">
+            <div className="inline-flex items-center justify-center mb-3 relative">
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg float">
+                <ResonaLogo size={36} />
               </div>
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl"></div>
             </div>
-            <h1 className="text-2xl font-bold gradient-text mb-2">
+            <h1 className="text-xl font-bold gradient-text mb-1">
               Welcome Back
             </h1>
-            <p className="text-gray-400 text-sm">Sign in to your music universe</p>
+            <p className="text-gray-400 text-xs">Sign in to your music universe</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {/* Development Notice */}
             {import.meta.env.DEV && (
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6">
-                <h3 className="text-yellow-400 font-medium mb-2">⚠️ Development Mode</h3>
-                <p className="text-sm text-gray-300">Create an account or use your own credentials to login.</p>
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 mb-4">
+                <h3 className="text-yellow-400 font-medium mb-1 text-sm">⚠️ Development Mode</h3>
+                <p className="text-xs text-gray-300">Create an account or use your own credentials to login.</p>
               </div>
             )}
 
             {/* Enhanced Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-xs font-medium text-gray-300 mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <FaEnvelope className="text-gray-400" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaEnvelope className="text-gray-400 text-sm" />
                 </div>
                 <input
                   type="email"
@@ -120,13 +120,13 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-600/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200"
+                  className="w-full pl-10 pr-3 py-3 bg-gray-800/50 border border-gray-600/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm"
                   placeholder="Enter your email"
                 />
               </div>
               {errors.email && (
-                <p className="mt-2 text-sm text-red-400 flex items-center">
-                  <span className="w-4 h-4 mr-1">⚠</span>
+                <p className="mt-1.5 text-xs text-red-400 flex items-center">
+                  <span className="w-3 h-3 mr-1">⚠</span>
                   {errors.email}
                 </p>
               )}
@@ -134,12 +134,12 @@ const Login = () => {
 
             {/* Enhanced Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-xs font-medium text-gray-300 mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <FaLock className="text-gray-400" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400 text-sm" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -147,20 +147,20 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-12 pr-12 py-4 bg-gray-800/50 border border-gray-600/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200"
+                  className="w-full pl-10 pr-10 py-3 bg-gray-800/50 border border-gray-600/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? <FaEyeSlash className="text-sm" /> : <FaEye className="text-sm" />}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-2 text-sm text-red-400 flex items-center">
-                  <span className="w-4 h-4 mr-1">⚠</span>
+                <p className="mt-1.5 text-xs text-red-400 flex items-center">
+                  <span className="w-3 h-3 mr-1">⚠</span>
                   {errors.password}
                 </p>
               )}
@@ -170,11 +170,11 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full neo-button py-4 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full neo-button py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed mt-4"
             >
               {loading ? (
                 <div className="flex items-center justify-center">
-                  <div className="loading-spinner w-6 h-6 mr-2"></div>
+                  <div className="loading-spinner w-5 h-5 mr-2"></div>
                   Signing In...
                 </div>
               ) : (
@@ -184,19 +184,19 @@ const Login = () => {
           </form>
 
           {/* Enhanced Footer */}
-          <div className="mt-8 text-center">
+          <div className="mt-6 text-center">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-700"></div>
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-transparent text-gray-400">New to Resona?</span>
+              <div className="relative flex justify-center text-xs">
+                <span className="px-3 bg-transparent text-gray-400">New to Resona?</span>
               </div>
             </div>
             
             <Link
               to="/register"
-              className="mt-4 inline-block text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200"
+              className="mt-3 inline-block text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200 text-sm"
             >
               Create your account →
             </Link>

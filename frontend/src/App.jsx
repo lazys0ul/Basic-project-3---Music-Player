@@ -27,6 +27,11 @@ const PublicRoute = ({ children }) => {
   return !isAuthenticated ? children : <Navigate to="/dashboard" />;
 };
 
+// Public Music Library Route (accessible to everyone)
+const PublicLibraryRoute = ({ children }) => {
+  return children; // Always accessible
+};
+
 function App() {
   return (
     <ErrorBoundary>
@@ -67,6 +72,16 @@ function App() {
                       } 
                     />
                     
+                    {/* Public Music Library - accessible to everyone */}
+                    <Route 
+                      path="/library" 
+                      element={
+                        <PublicLibraryRoute>
+                          <Dashboard publicView={true} />
+                        </PublicLibraryRoute>
+                      } 
+                    />
+                    
                     {/* Protected Routes */}
                     <Route 
                       path="/dashboard" 
@@ -77,8 +92,8 @@ function App() {
                       } 
                     />
                     
-                    {/* Default Route */}
-                    <Route path="/" element={<Navigate to="/dashboard" />} />
+                    {/* Default Route - Load Library */}
+                    <Route path="/" element={<Navigate to="/library" />} />
                   </Routes>
                 </Suspense>
                 

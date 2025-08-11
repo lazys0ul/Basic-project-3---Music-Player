@@ -1,0 +1,151 @@
+name: 🔄 Pull Request
+description: Submit a pull request to contribute to Resona
+title: '[PR] '
+labels: ['needs review']
+assignees:
+  - lazys0ul
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎵 Thank you for contributing to Resona Music Platform!
+        
+        Please fill out this template to help us review your pull request efficiently.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 🎯 What does this PR do?
+      description: Provide a clear and concise description of what this PR accomplishes
+      placeholder: Brief description of changes...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: pr-type
+    attributes:
+      label: 🔄 Type of Change
+      description: What type of change does this PR introduce?
+      options:
+        - label: 🐛 Bug fix (non-breaking change which fixes an issue)
+        - label: ✨ New feature (non-breaking change which adds functionality)
+        - label: 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
+        - label: 📚 Documentation update
+        - label: 🎨 Style/UI changes
+        - label: ♻️ Code refactoring (no functional changes)
+        - label: ⚡ Performance improvements
+        - label: 🔧 Build/CI changes
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: 🧪 How Has This Been Tested?
+      description: Describe the testing approach and any specific test cases
+      placeholder: |
+        - [ ] Unit tests
+        - [ ] Integration tests
+        - [ ] Manual testing
+        - [ ] Browser compatibility testing
+        
+        Detailed testing steps:
+        1. ...
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: related-issues
+    attributes:
+      label: 🔗 Related Issues
+      description: Link any related issues (e.g., "Fixes #123", "Closes #456")
+      placeholder: "Fixes #123"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ Pre-submission Checklist
+      description: Please verify that you have completed all the following
+      options:
+        - label: I have read the [CONTRIBUTING.md](../CONTRIBUTING.md) guidelines
+          required: true
+        - label: I have performed a self-review of my own code
+          required: true
+        - label: I have commented my code, particularly in hard-to-understand areas
+          required: true
+        - label: I have made corresponding changes to the documentation
+          required: false
+        - label: My changes generate no new warnings or errors
+          required: true
+        - label: I have added tests that prove my fix is effective or that my feature works
+          required: false
+        - label: New and existing unit tests pass locally with my changes
+          required: true
+        - label: Any dependent changes have been merged and published in downstream modules
+          required: false
+
+  - type: dropdown
+    id: tested-browsers
+    attributes:
+      label: 🌐 Browser Testing
+      description: Which browsers have you tested this change on?
+      multiple: true
+      options:
+        - Chrome (latest)
+        - Firefox (latest)
+        - Safari (latest)
+        - Edge (latest)
+        - Chrome Mobile
+        - Safari iOS
+        - Not applicable
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 Screenshots (if applicable)
+      description: Add screenshots for UI changes or visual improvements
+      placeholder: |
+        **Before:**
+        ![Before](image-url)
+        
+        **After:**
+        ![After](image-url)
+
+  - type: textarea
+    id: performance-impact
+    attributes:
+      label: ⚡ Performance Impact
+      description: Describe any performance implications of your changes
+      placeholder: |
+        - Bundle size change: +/-X KB
+        - Loading time impact: No change/Improved by X%
+        - Memory usage: No change/Optimized
+        - Database queries: No change/Reduced by X
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 📝 Additional Context
+      description: Add any other context about the pull request here
+      placeholder: Any additional information that would help reviewers understand your changes...
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 📋 For Reviewers
+        
+        ### Review Checklist:
+        - [ ] Code follows project style guidelines
+        - [ ] Self-review has been performed by the author
+        - [ ] Code is properly commented
+        - [ ] Changes are covered by tests
+        - [ ] All tests pass
+        - [ ] Documentation has been updated
+        - [ ] No new security vulnerabilities introduced
+        - [ ] Performance impact is acceptable
+        
+        ---
+        
+        **Thank you for your contribution! 🎵**

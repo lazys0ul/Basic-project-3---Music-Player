@@ -2,7 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fix webkit compatibility issues - Support both webkit and modern browsers */
+/* Header Collapse Animation Classes */
+@layer utilities {
+  .scale-98 {
+    transform: scale(0.98);
+  }
+  
+  .header-collapsed {
+    max-height: 60px;
+    transform: translateY(-10px);
+  }
+  
+  .header-expanded {
+    max-height: 200px;
+    transform: translateY(0);
+  }
+  
+  .smooth-collapse {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Fix webkit compatibility issues - Support both modern and legacy browsers */
 html, :host {
   -webkit-text-size-adjust: 100%; /* Legacy webkit support */
   -moz-text-size-adjust: 100%; /* Firefox support (where available) */

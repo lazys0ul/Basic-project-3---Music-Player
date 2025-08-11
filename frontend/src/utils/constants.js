@@ -10,6 +10,9 @@ export const API_CONFIG = {
   }
 };
 
+// API Base URL for easy import  
+export const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : `${API_CONFIG.DEFAULT_BACKEND_URL}/api`;
+
 // File Upload Constants
 export const UPLOAD_CONFIG = {
   ALLOWED_AUDIO_TYPES: ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/mp4', 'audio/aac'],

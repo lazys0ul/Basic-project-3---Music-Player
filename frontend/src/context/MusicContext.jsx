@@ -175,6 +175,10 @@ export const MusicProvider = ({ children }) => {
       const response = await axios.get(url);
       
       if (response.data.success) {
+        console.log('Music fetched:', response.data.music);
+        response.data.music.forEach(track => {
+          console.log(`Track: ${track.title}, Image: ${track.imageFilepath}`);
+        });
         setPlaylist(response.data.music);
         return response.data.music;
       } else {
@@ -262,6 +266,12 @@ export const MusicProvider = ({ children }) => {
     setIsPlaying(false);
   };
 
+  // Pause Track (alias for consistency)
+  const pauseTrack = () => {
+    audioRef.current.pause();
+    setIsPlaying(false);
+  };
+
   // Stop
   const stop = () => {
     audioRef.current.pause();
@@ -306,6 +316,7 @@ export const MusicProvider = ({ children }) => {
     uploadMusic,
     deleteMusic,
     playTrack,
+    pauseTrack,
     togglePlayPause,
     pause,
     stop,

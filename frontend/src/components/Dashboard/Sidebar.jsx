@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fa';
 import { ResonaLogo } from '../../assets/resona-brand.jsx';
 
-const Sidebar = ({ activeTab, setActiveTab, onClose }) => {
+const Sidebar = ({ activeTab, setActiveTab, onClose, publicView = false }) => {
   const { logout, user } = useAuth();
 
   const menuItems = [
@@ -20,15 +20,29 @@ const Sidebar = ({ activeTab, setActiveTab, onClose }) => {
       id: 'library',
       label: 'Music Library',
       icon: FaCompactDisc,
-      description: 'Browse your collection'
+      description: 'Browse music collection',
+      public: true // Available in public view
     },
     {
       id: 'upload',
       label: 'Upload Music',
       icon: FaUpload,
-      description: 'Add new tracks'
+      description: 'Add new tracks',
+      public: false // Requires authentication
+    },
+    {
+      id: 'admin',
+      label: 'Admin Panel',
+      icon: FaCog,
+      description: 'Manage users & content',
+      public: false,
+      adminOnly: true // Admin only
     }
-  ];
+  ].filter(item => {
+    if (publicView) return item.public;
+    if (item.adminOnly) return user?.role === 'admin';
+    return true;
+  });
 
   return (
     <div className="w-80 glass-card border-r border-gray-700/50 flex flex-col relative overflow-hidden h-full">
@@ -115,44 +129,76 @@ const Sidebar = ({ activeTab, setActiveTab, onClose }) => {
           </div>
         </nav>
 
-        {/* Enhanced User Profile & Logout */}
+        {/* Enhanced User Profile & Actions */}
         <div className="p-6 border-t border-gray-700/30">
-          {/* User Profile Card */}
-          <div className="glass-card p-4 rounded-2xl mb-4 border border-gray-600/30">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-lg">
-                    {user?.username?.charAt(0).toUpperCase()}
-                  </span>
+          {publicView ? (
+            /* Public View - Login/Register buttons */
+            <div className="space-y-3">
+              <a 
+                href="/login" 
+                className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 rounded-xl text-white font-medium transition-all duration-200 shadow-lg shadow-purple-500/25"
+              >
+                <FaSignOutAlt />
+                <span>Login</span>
+              </a>
+              <a 
+                href="/register" 
+                className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 rounded-xl text-white font-medium transition-all duration-200 shadow-lg shadow-pink-500/25"
+              >
+                <FaUser />
+                <span>Sign Up</span>
+              </a>
+              <div className="text-center text-xs text-gray-400 pt-2">
+                Login to upload music and access full features
+              </div>
+            </div>
+          ) : (
+            /* Authenticated View - User profile */
+            <>
+              {/* User Profile Card */}
+              <div className="glass-card p-4 rounded-2xl mb-4 border border-gray-600/30">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-lg">
+                        {user?.username?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white truncate">
+                      {user?.username}
+                    </p>
+                    <p className="text-xs text-gray-400 truncate">
+                      {user?.email}
+                    </p>
+                  </div>
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                
+                {/* Role badge */}
+                <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-gray-700/50">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    user?.role === 'admin' 
+                      ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' 
+                      : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                  }`}>
+                    {user?.role === 'admin' ? '👑 Admin' : '🎵 User'}
+                  </span>
+                  <span>Online</span>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">
-                  {user?.username}
-                </p>
-                <p className="text-xs text-gray-400 truncate">
-                  {user?.email}
-                </p>
-              </div>
-            </div>
-            
-            {/* Quick stats */}
-            <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-gray-700/50">
-              <span>Premium User</span>
-              <span>Online</span>
-            </div>
-          </div>
           
-          {/* Logout Button */}
-          <button
-            onClick={logout}
-            className="w-full flex items-center justify-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-red-500/10 rounded-xl transition-all duration-200 border border-gray-700/30 hover:border-red-500/30"
-          >
-            <FaSignOutAlt />
-            <span className="font-medium">Sign Out</span>
-          </button>
+              {/* Logout Button */}
+              <button
+                onClick={logout}
+                className="w-full flex items-center justify-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-red-500/10 rounded-xl transition-all duration-200 border border-gray-700/30 hover:border-red-500/30"
+              >
+                <FaSignOutAlt />
+                <span className="font-medium">Sign Out</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import mongoose from 'mongoose'
 import connectDB from './config/mongoDB.js'
 import authRouter from './routes/authRoutes.js'
 import musicRouter from './routes/musicRoutes.js'
+import adminRouter from './routes/adminRoutes.js'
 import validateEnvironment from './utils/validateEnv.js'
 import requestLogger from './middleware/requestLogger.js'
 import path from 'path'
@@ -79,7 +80,7 @@ app.use(cors({
     
     const allowedOrigins = process.env.ALLOWED_ORIGINS 
       ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
-      : ['http://localhost:3000'];
+      : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'];
     
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -129,6 +130,7 @@ app.use('/uploads', express.static(path.join(path.resolve(), 'uploads'), {
 // API Routes
 app.use('/api/auth', authRouter) 
 app.use('/api/music', musicRouter)
+app.use('/api/admin', adminRouter)
 
 // Dedicated audio streaming endpoint with explicit CORS
 app.get('/stream/:filename', async (req, res) => {

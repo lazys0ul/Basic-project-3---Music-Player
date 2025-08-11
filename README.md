@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Resona Logo](https://raw.githubusercontent.com/lazys0ul/Basic-project-3---Music-Player/main/frontend/public/icon-512.svg)
+
 
 ###  **Music Platform for Web Development Excellence**
 

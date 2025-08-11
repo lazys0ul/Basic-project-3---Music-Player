@@ -20,6 +20,11 @@ services:
         value: 12
       - key: MAX_FILE_SIZE
         value: 10485760
+      - key: ALLOWED_ORIGINS
+        fromService:
+          type: web
+          name: resona-frontend
+          property: host
 
   # Frontend React App  
   - type: web

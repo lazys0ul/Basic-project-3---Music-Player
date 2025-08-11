@@ -10,11 +10,12 @@ services:
         value: production
       - key: PORT
         value: 5000
+      # Your existing JWT secret - already secure!
       - key: JWT_SECRET
-        generateValue: true
-      # IMPORTANT: You need to replace this with your actual MongoDB Atlas connection string
+        value: 970797bc2b8d6c757dda53bbe6717554d0737d8b7b9ec0218487e16eecd78fe2d2099a0760e13c5424fb67ebad8e6966afa8d467a8dc71fa885b18556f4141e6
+      # Your existing MongoDB Atlas connection - already working!
       - key: MONGO_URL
-        value: mongodb+srv://username:password@cluster.mongodb.net/resona?retryWrites=true&w=majority
+        value: mongodb+srv://pranavpriyadarshi903:RdwlX7HHY9OJFS1g@cluster0.zdus30v.mongodb.net/resona_music_player?retryWrites=true&w=majority
       - key: BCRYPT_ROUNDS
         value: 12
       - key: MAX_FILE_SIZE

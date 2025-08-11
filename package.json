@@ -111,6 +111,10 @@
     "deploy:vercel": "npm run build:frontend && vercel --prod",
     "predeploy": "npm run build && npm run test && npm run lint",
     
+    "🧪 Testing": "# ============================================",
+    "test:ci": "powershell -ExecutionPolicy Bypass -File ./scripts/test-ci-locally.ps1",
+    "test:ci:bash": "bash ./scripts/test-ci-locally.sh",
+    
     "ℹ️ Information": "# ======================================",
     "info": "node -e \"console.log('🎵 Resona Music Platform v' + require('./package.json').version)\"",
     "env:check": "node backend/utils/validateEnv.js",

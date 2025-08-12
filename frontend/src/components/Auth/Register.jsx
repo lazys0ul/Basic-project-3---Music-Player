@@ -9,7 +9,8 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    adminCode: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -70,7 +71,7 @@ const Register = () => {
     
     if (!validateForm()) return;
 
-    const result = await register(formData.username, formData.email, formData.password);
+    const result = await register(formData.username, formData.email, formData.password, formData.adminCode);
     if (result.success) {
       navigate('/dashboard');
     }
@@ -242,6 +243,30 @@ const Register = () => {
                   {errors.confirmPassword}
                 </p>
               )}
+            </div>
+
+            {/* Admin Code Field (Optional) */}
+            <div>
+              <label htmlFor="adminCode" className="block text-xs font-medium text-gray-300 mb-1.5">
+                Admin Code <span className="text-gray-500">(Optional - for admin registration)</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaUser className="text-gray-400 text-sm" />
+                </div>
+                <input
+                  type="text"
+                  id="adminCode"
+                  name="adminCode"
+                  value={formData.adminCode}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-3 py-3 bg-gray-800/50 border border-gray-600/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400 backdrop-blur-sm touch-manipulation text-sm"
+                  placeholder="Enter admin code (leave empty for regular user)"
+                />
+              </div>
+              <p className="mt-1.5 text-xs text-gray-500">
+                💡 Leave this field empty to register as a regular user
+              </p>
             </div>
 
             {/* Submit Button */}

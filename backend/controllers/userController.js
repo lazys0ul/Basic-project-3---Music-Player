@@ -22,7 +22,7 @@ const validateUsername = (username) => {
 
 const register = async (req, res) => {
   try {
-      const {username, email, password} = req.body
+      const {username, email, password, adminCode} = req.body
 
       // Input validation
       if (!username || !email || !password) {
@@ -49,11 +49,20 @@ const register = async (req, res) => {
         const salt = await bcrypt.genSalt(12) // Increased from 10 to 12 for better security
         const hashedPassword = await bcrypt.hash(password, salt)
 
+        // Determine role based on admin code
+        let userRole = 'user'; // Default role
+        const adminSecretCode = process.env.ADMIN_SECRET_CODE || 'RESONA_ADMIN_2025';
+        
+        if (adminCode && adminCode === adminSecretCode) {
+            userRole = 'admin';
+            logger.info('New admin registered with secret code', { email, username });
+        }
+
         const newUser = new userModel({
             username: username.trim(),
             email: email.toLowerCase().trim(),
             password: hashedPassword,
-            role: 'user' // Default role
+            role: userRole
         })
     
         await newUser.save()

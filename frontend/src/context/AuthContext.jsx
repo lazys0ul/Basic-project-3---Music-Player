@@ -84,14 +84,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username, email, password) => {
+  const register = async (username, email, password, adminCode = '') => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_BASE}/auth/register`, {
+      const requestData = {
         username,
         email,
         password
-      });
+      };
+
+      // Only include adminCode if it's provided and not empty
+      if (adminCode && adminCode.trim()) {
+        requestData.adminCode = adminCode.trim();
+      }
+
+      const response = await axios.post(`${API_BASE}/auth/register`, requestData);
 
       if (response.data.success) {
         const { user: userData, token: userToken } = response.data;
@@ -101,7 +108,12 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', userToken);
         localStorage.setItem('user', JSON.stringify(userData));
         
-        toast.success('Registration successful!');
+        // Show different success message for admin registration
+        if (userData.role === 'admin') {
+          toast.success('🎉 Admin registration successful! Welcome to Resona!');
+        } else {
+          toast.success('Registration successful!');
+        }
         return { success: true };
       }
     } catch (error) {

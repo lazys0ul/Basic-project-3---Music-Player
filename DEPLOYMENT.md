@@ -1,7 +1,7 @@
 # 🚀 Deployment Guide
 
 ## Live Application
-- **Frontend**: https://resonamusic.vercel.app
+- **Frontend**: https://resona-music.vercel.app
 - **Backend**: https://basic-project-3-music-player-production.up.railway.app
 
 ## Deployment Status
@@ -23,7 +23,7 @@ DB_NAME=resona_music_player
 JWT_SECRET=...
 NODE_ENV=production
 PORT=5000
-ALLOWED_ORIGINS=https://resonamusic.vercel.app
+ALLOWED_ORIGINS=https://resona-music.vercel.app,https://resona-music-lvu89rgon-pranavs-projects-55eb1917.vercel.app
 ```
 
 ### Vercel (Frontend)

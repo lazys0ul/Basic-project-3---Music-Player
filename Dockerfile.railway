@@ -1,0 +1,23 @@
+# Use the latest LTS Node.js version that supports Vite
+FROM node:22.12.0-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy backend package files
+COPY backend/package*.json ./
+
+# Install production dependencies
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Copy backend source code
+COPY backend/ ./
+
+# Create uploads directory
+RUN mkdir -p uploads
+
+# Expose port
+EXPOSE 5000
+
+# Start the application
+CMD ["node", "server.js"]

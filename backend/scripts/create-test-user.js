@@ -34,7 +34,7 @@ const createTestUser = async () => {
         });
 
         await testUser.save();
-        console.log('✅ Test user created successfully!');
+        console.log('Test user created successfully!');
         console.log('Email: user@resona.com');
         console.log('Password: user123');
         console.log('Role: user');

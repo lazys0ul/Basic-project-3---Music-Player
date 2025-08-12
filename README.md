@@ -1,4 +1,4 @@
-# 🎵 Resona - Professional Music Streaming Platform
+# Resona - Professional Music Streaming Platform
 
 <div align="center">
 

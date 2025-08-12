@@ -8,22 +8,20 @@ dotenv.config();
 
 async function testDatabase() {
     try {
-        console.log('🔄 Testing database connection...');
-        
+        console.log('Testing database connection...');
+
         await connectDB();
-        console.log('✅ Connected to MongoDB successfully');
-        
-        // Test collections
+        console.log('Connected to MongoDB successfully');        // Test collections
         const userCount = await User.countDocuments();
         const musicCount = await Music.countDocuments();
         
-        console.log(`\n📊 Database Statistics:`);
-        console.log(`👥 Users in database: ${userCount}`);
-        console.log(`🎵 Music tracks in database: ${musicCount}`);
+        console.log(`\nDatabase Statistics:`);
+        console.log(`Users in database: ${userCount}`);
+        console.log(`Music tracks in database: ${musicCount}`);
         
         // Get recent music tracks
         if (musicCount > 0) {
-            console.log(`\n🎼 Recent Music Tracks:`);
+            console.log(`\nRecent Music Tracks:`);
             const recentTracks = await Music.find()
                 .sort({ createdAt: -1 })
                 .limit(5)
@@ -36,7 +34,7 @@ async function testDatabase() {
         
         // Get recent users (excluding password)
         if (userCount > 0) {
-            console.log(`\n👤 Recent Users:`);
+            console.log(`\nRecent Users:`);
             const recentUsers = await User.find()
                 .sort({ createdAt: -1 })
                 .limit(3)
@@ -48,7 +46,7 @@ async function testDatabase() {
         }
         
         // Test creating and deleting a sample document
-        console.log(`\n🧪 Testing database operations...`);
+        console.log(`\nTesting database operations...`);
         const testUser = new User({
             username: 'test_connection_' + Date.now(),
             email: `test${Date.now()}@connection.test`,
@@ -56,21 +54,21 @@ async function testDatabase() {
         });
         
         const savedUser = await testUser.save();
-        console.log('✅ Test document created successfully');
+        console.log('Test document created successfully');
         console.log(`   ID: ${savedUser._id}`);
         console.log(`   Username: ${savedUser.username}`);
         
         await User.deleteOne({ _id: savedUser._id });
-        console.log('✅ Test document deleted successfully');
+        console.log('Test document deleted successfully');
         
         // Test database collections
-        console.log(`\n📁 Available Collections:`);
+        console.log(`\nAvailable Collections:`);
         const collections = await mongoose.connection.db.listCollections().toArray();
         collections.forEach(collection => {
             console.log(`   - ${collection.name}`);
         });
         
-        console.log('\n🎉 Database connection and operations are working correctly!');
+        console.log('\nDatabase connection and operations are working correctly!');
         console.log(`🔗 Connected to: ${mongoose.connection.host}:${mongoose.connection.port}/${mongoose.connection.name}`);
         
     } catch (error) {

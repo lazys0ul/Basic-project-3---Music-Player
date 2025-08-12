@@ -37,7 +37,7 @@ const createAdminUser = async () => {
         });
 
         await adminUser.save();
-        console.log('✅ Admin user created successfully!');
+        console.log('Admin user created successfully!');
         console.log('Email: admin@resona.com');
         console.log('Password: admin123');
         console.log('Role: admin');

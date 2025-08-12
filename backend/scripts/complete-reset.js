@@ -20,7 +20,7 @@ async function connectDB() {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-        console.log('✅ Connected to MongoDB');
+        console.log('Connected to MongoDB');
     } catch (error) {
         console.error('❌ MongoDB connection error:', error);
         process.exit(1);
@@ -34,7 +34,7 @@ async function cleanUploads() {
     try {
         if (fs.existsSync(uploadsDir)) {
             const files = fs.readdirSync(uploadsDir);
-            console.log(`\n🧹 Found ${files.length} files in uploads directory`);
+            console.log(`\nFound ${files.length} files in uploads directory`);
             
             for (const file of files) {
                 const filePath = path.join(uploadsDir, file);
@@ -43,7 +43,7 @@ async function cleanUploads() {
                 fs.unlinkSync(filePath);
             }
             
-            console.log('✅ All files deleted from uploads directory');
+            console.log('All files deleted from uploads directory');
         } else {
             console.log('📁 Uploads directory not found, creating...');
             fs.mkdirSync(uploadsDir, { recursive: true });
@@ -65,12 +65,12 @@ async function clearDatabase() {
         
         if (musicCount > 0) {
             await Music.deleteMany({});
-            console.log('✅ All music records deleted');
+            console.log('All music records deleted');
         }
         
         // Keep users but clear their music references
         await User.updateMany({}, { $set: { uploadedMusic: [] } });
-        console.log('✅ User music references cleared');
+        console.log('User music references cleared');
         
     } catch (error) {
         console.error('❌ Error clearing database:', error);

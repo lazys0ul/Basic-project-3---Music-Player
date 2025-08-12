@@ -1,6 +1,6 @@
-# 🔒 Security Policy
+# Security Policy
 
-## 🛡️ Security Overview
+## Security Overview
 
 The security of Resona Music Platform was my top priority. I implemented industry-standard security practices and continuously monitor for vulnerabilities.
 

@@ -1,0 +1,35 @@
+# Ignore frontend directory for Railway backend deployment
+frontend/
+frontend/**
+
+# Ignore development files
+*.md
+.env*
+.git*
+.vscode/
+.vs/
+
+# Ignore deployment files for other platforms
+vercel.json
+render.yaml
+Dockerfile*
+docker-compose*
+
+# Ignore logs and temporary files
+logs/
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignore documentation
+docs/
+*.pdf
+
+# Ignore test files
+*.test.js
+test/
+tests/
+__tests__/
+
+# Ignore development dependencies
+node_modules/.cache/

@@ -1,0 +1,15 @@
+{
+  "name": "resona-backend-railway",
+  "version": "1.0.0",
+  "description": "Railway deployment for Resona Music Platform Backend",
+  "main": "backend/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "cd backend && node server.js",
+    "build": "cd backend && npm ci --omit=dev"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10.0.0"
+  }
+}

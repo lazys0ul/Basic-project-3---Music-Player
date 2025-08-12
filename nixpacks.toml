@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+nixLibs = ["glibc"]
+
+[phases.build]
+cmds = [
+    "cd backend",
+    "rm -rf node_modules",
+    "npm ci --omit=dev --no-fund --no-audit",
+    "npm cache clean --force"
+]
+
+[phases.start]
+cmd = "cd backend && node server.js"
+
+[variables]
+NODE_ENV = "production"
+NPM_CONFIG_UPDATE_NOTIFIER = "false"

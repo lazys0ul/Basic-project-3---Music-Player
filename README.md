@@ -19,7 +19,7 @@
 [![Security](https://img.shields.io/badge/Security-Enterprise%20Grade-red?style=for-the-badge&logo=shield&logoColor=white)](#security-features)
 [![Mobile](https://img.shields.io/badge/Mobile-Fully%20Responsive-blue?style=for-the-badge&logo=mobile&logoColor=white)](#responsive-design)
 
-[ **Live Demo**](https://your-demo-url.com) • [📖 **Documentation**](#documentation) • [💻 **Installation**](#installation) • [🛠️ **API Reference**](#api-reference)
+[ **Live Demo**](https://resonamusic.vercel.app) • [📖 **Documentation**](#documentation) • [💻 **Installation**](#installation) • [🛠️ **API Reference**](#api-reference)
 
 ---
 

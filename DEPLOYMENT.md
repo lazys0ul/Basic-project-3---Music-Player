@@ -2,7 +2,7 @@
 
 ## Live Application
 - **Frontend**: https://resonamusic.vercel.app
-- **Backend**: https://your-railway-url.up.railway.app (update with actual URL)
+- **Backend**: https://basic-project-3-music-player-production.up.railway.app
 
 ## Deployment Status
 ✅ **Frontend**: Deployed on Vercel  

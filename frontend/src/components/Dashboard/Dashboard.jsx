@@ -168,7 +168,9 @@ const Dashboard = ({ publicView = false }) => {
           headerCollapsed ? 'py-3 opacity-75 scale-98' : 'py-4 lg:py-6 opacity-100 scale-100'
         }`}>
           {/* Background decoration */}
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-pink-500/10"></div>
+          <div className={`absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-pink-500/10 transition-opacity duration-500 ${
+            headerCollapsed ? 'opacity-0' : 'opacity-100'
+          }`}></div>
           
           <div className="relative z-10">
             {/* Banner Section */}
@@ -200,9 +202,14 @@ const Dashboard = ({ publicView = false }) => {
                     <p className="text-gray-300 text-base lg:text-lg">
                       {publicView 
                         ? "Discover amazing music • Login for full access" 
-                        : `Welcome back, ${user?.username ? (
-                          <span className="font-semibold gradient-text">{user.username}</span>
-                        ) : 'User'}`
+                        : (
+                          <>
+                            Welcome back, {' '}
+                            <span className="font-semibold gradient-text">
+                              {user?.username || 'User'}
+                            </span>
+                          </>
+                        )
                       }
                     </p>
                   </div>

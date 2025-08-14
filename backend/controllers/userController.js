@@ -536,9 +536,12 @@ const getAdminStats = async (req, res) => {
     }
 }
 
+// Export with aliases to match route imports
 export { 
-    register, 
-    login, 
+    register as registerUser, 
+    login as loginUser,
+    register,
+    login,
     uploadMusic, 
     getMusic, 
     deleteMusic,

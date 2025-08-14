@@ -17,6 +17,17 @@ dotenv.config()
 // Validate environment variables before starting
 validateEnvironment()
 
+// Global error handlers for uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error(' UNCAUGHT EXCEPTION! Shutting down...', error);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (error) => {
+    console.error(' UNHANDLED REJECTION! Shutting down...', error);
+    process.exit(1);
+});
+
 const app = express()
 const PORT = process.env.PORT || 5000
 
@@ -75,12 +86,13 @@ app.use(requestLogger)
 
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, etc.)
-    if (!origin) return callback(null, true);
+    // In development, be more restrictive - don't allow no origin requests for security
+    if (!origin && process.env.NODE_ENV === 'production') return callback(null, true);
+    if (!origin && process.env.NODE_ENV !== 'production') return callback(new Error('Origin required in development'));
     
     const allowedOrigins = process.env.ALLOWED_ORIGINS 
       ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
-      : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'];
+      : ['http://localhost:3000'];
     
     if (allowedOrigins.includes(origin)) {
       callback(null, true);

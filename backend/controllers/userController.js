@@ -5,6 +5,9 @@ import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import path from 'path'
 import logger from '../utils/logger.js'
+import { sanitizeQueryParams } from '../utils/sanitizer.js'
+import { blacklistToken } from '../utils/tokenBlacklist.js'
+import { canAttemptLogin, clearLoginAttempts } from '../utils/loginLimiter.js'
 
 // Input validation helpers
 const validateEmail = (email) => {
@@ -13,7 +16,15 @@ const validateEmail = (email) => {
 }
 
 const validatePassword = (password) => {
-    return password && password.length >= 6
+    if (!password || password.length < 8) return false;
+    
+    // Check for at least one lowercase, one uppercase, one number, and one special char
+    const hasLowercase = /[a-z]/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    return hasLowercase && hasUppercase && hasNumbers && hasSpecialChar;
 }
 
 const validateUsername = (username) => {
@@ -38,7 +49,10 @@ const register = async (req, res) => {
       }
 
       if (!validatePassword(password)) {
-         return res.status(400).json({success: false, message:"Password must be at least 6 characters long"})
+         return res.status(400).json({
+            success: false, 
+            message: "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character"
+         })
       }
 
       const existingUser = await userModel.findOne({ email })
@@ -96,6 +110,15 @@ const login = async (req, res) => {
     try {
        const { email, password } = req.body
 
+       // Check rate limiting first
+       if (!canAttemptLogin(req.ip)) {
+           logger.warn('Login rate limit exceeded', { ip: req.ip, email });
+           return res.status(429).json({ 
+               success: false, 
+               message: "Too many login attempts. Please try again in 15 minutes." 
+           });
+       }
+
        // Input validation
        if (!email || !password) {
           return res.status(400).json({ success: false, message: "Email and password are required" })
@@ -137,9 +160,33 @@ const login = async (req, res) => {
 
         res.status(200).json({ success: true, message: "User logged in successfully", user: userResponse, token })
 
+        // Clear login attempts on successful login
+        clearLoginAttempts(req.ip);
+
     } catch (error) {
         logger.error('Login failed', { error: error.message, email: req.body?.email })
         res.status(500).json({ success: false, message: 'Internal server error' })
+    }
+}
+
+// Logout user and blacklist token
+const logout = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization
+        const token = authHeader && authHeader.split(' ')[1]
+        
+        if (token) {
+            blacklistToken(token)
+            logger.info('User logged out', { userId: req.user?.id })
+        }
+        
+        return res.status(200).json({
+            success: true, 
+            message: "Logged out successfully"
+        })
+    } catch (error) {
+        logger.error('Logout failed', { error: error.message, userId: req.user?.id })
+        return res.status(500).json({success: false, message:"Server error"})
     }
 }
 
@@ -223,9 +270,9 @@ const uploadMusic = async (req, res) => {
 
 const getMusic = async (req, res) => {
     try {
-        const { search, artist, limit = 50 } = req.query
+        const { search, artist, limit = 50 } = sanitizeQueryParams(req.query)
         
-        // Build search query
+        // Build search query with sanitized input
         let query = {}
         if (search) {
             query.$or = [
@@ -498,5 +545,6 @@ export {
     getAllUsers,
     updateUserRole,
     deleteUser,
-    getAdminStats
+    getAdminStats,
+    logout
 }

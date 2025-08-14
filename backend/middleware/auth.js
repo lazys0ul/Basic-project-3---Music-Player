@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import userModel from '../models/userModel.js'
+import { isTokenBlacklisted } from '../utils/tokenBlacklist.js'
 
 const authenticateToken = async (req, res, next) => {
     try {
@@ -10,6 +11,14 @@ const authenticateToken = async (req, res, next) => {
             return res.status(401).json({ 
                 success: false, 
                 message: 'Access token required' 
+            })
+        }
+
+        // Check if token is blacklisted
+        if (isTokenBlacklisted(token)) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Token has been revoked' 
             })
         }
 

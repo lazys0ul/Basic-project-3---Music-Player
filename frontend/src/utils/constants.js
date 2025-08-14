@@ -17,7 +17,7 @@ export const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_A
 export const UPLOAD_CONFIG = {
   ALLOWED_AUDIO_TYPES: ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/mp4', 'audio/aac'],
   ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_FILE_SIZE: 20 * 1024 * 1024,  // 20MB
   MAX_IMAGE_SIZE: 5 * 1024 * 1024,  // 5MB
   ALLOWED_EXTENSIONS: {
     AUDIO: ['.mp3', '.wav', '.flac', '.m4a', '.aac'],

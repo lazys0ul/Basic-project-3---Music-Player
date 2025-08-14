@@ -78,8 +78,8 @@ const limiter = rateLimit({
 app.use('/api/', limiter)
 
 // Middleware
-app.use(express.json({ limit: '1mb' })) // Reduced from 10mb
-app.use(express.urlencoded({ extended: true, limit: '1mb' })) // Reduced from 10mb
+app.use(express.json({ limit: '25mb' })) // Increased to support 20MB files + metadata
+app.use(express.urlencoded({ extended: true, limit: '25mb' })) // Increased to support 20MB files + metadata
 
 // Security request logging
 app.use(requestLogger)

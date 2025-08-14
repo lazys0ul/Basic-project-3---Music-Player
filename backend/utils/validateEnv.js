@@ -17,7 +17,7 @@ const optionalEnvVars = {
   BCRYPT_ROUNDS: '12',
   RATE_LIMIT_WINDOW: '15',
   RATE_LIMIT_MAX_REQUESTS: '1000',
-  MAX_FILE_SIZE: '10485760',
+  MAX_FILE_SIZE: '20971520',
   UPLOAD_DIRECTORY: 'uploads',
   ALLOWED_ORIGINS: 'http://localhost:3000'
 }

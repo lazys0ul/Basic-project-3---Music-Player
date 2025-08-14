@@ -21,7 +21,7 @@ const MAGIC_NUMBERS = {
 // Allowed file configurations
 const FILE_CONFIG = {
   AUDIO: {
-    MAX_SIZE: parseInt(process.env.MAX_FILE_SIZE) || 10 * 1024 * 1024, // 10MB
+    MAX_SIZE: parseInt(process.env.MAX_FILE_SIZE) || 20 * 1024 * 1024, // 20MB
     ALLOWED_TYPES: ['audio/mpeg', 'audio/wav', 'audio/flac', 'audio/mp4', 'audio/aac'],
     ALLOWED_EXTENSIONS: ['.mp3', '.wav', '.flac', '.m4a', '.aac'],
     MAGIC_NUMBERS: ['MP3', 'MP3_ID3', 'WAV', 'FLAC', 'M4A']
@@ -177,7 +177,7 @@ const validateImageFile = (file) => {
   // For now, just basic size checks
   
   // Check for extremely large images
-  if (file.size > 10 * 1024 * 1024) { // 10MB
+  if (file.size > 20 * 1024 * 1024) { // 20MB
     errors.push('Image file is too large. Please compress the image.');
   }
 

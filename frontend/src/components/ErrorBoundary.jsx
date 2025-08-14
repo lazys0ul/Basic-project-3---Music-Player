@@ -27,25 +27,9 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  reportError = async (error, errorInfo) => {
-    try {
-      // This would be replaced with your error reporting service
-      // Examples: Sentry, LogRocket, Bugsnag, etc.
-      const errorReport = {
-        message: error.message,
-        stack: error.stack,
-        componentStack: errorInfo.componentStack,
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        url: window.location.href
-      };
-      
-      // Example API call to error service
-      console.log('Error report:', errorReport);
-      // await fetch('/api/errors', { method: 'POST', body: JSON.stringify(errorReport) });
-    } catch (reportingError) {
-      console.error('Failed to report error:', reportingError);
-    }
+  reportError = async () => {
+    // Error reporting disabled by default - enable in production with proper service
+    return;
   }
 
   render() {

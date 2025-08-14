@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import musicModel from '../models/musicModel.js';
-import userModel from '../models/userModel.js';
 
 dotenv.config();
 

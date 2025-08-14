@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import musicModel from '../models/musicModel.js';
-import userModel from '../models/userModel.js';
 
 dotenv.config();
 

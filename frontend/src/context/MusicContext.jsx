@@ -198,10 +198,19 @@ export const MusicProvider = ({ children }) => {
       formData.append('music', musicFile);
       formData.append('image', imageFile);
 
+      // Get token from localStorage to ensure it's included
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+      
+      // Add Authorization header if token exists
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await axios.post(`${API_BASE}/music/add-music`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers,
       });
 
       if (response.data.success) {
@@ -210,7 +219,7 @@ export const MusicProvider = ({ children }) => {
         return { success: true };
       }
     } catch (error) {
-      const message = error.response?.data?.detail || 'Upload failed';
+      const message = error.response?.data?.message || error.response?.data?.detail || 'Upload failed';
       toast.error(message);
       return { success: false, message };
     }
@@ -232,7 +241,7 @@ export const MusicProvider = ({ children }) => {
         return { success: true };
       }
     } catch (error) {
-      const message = error.response?.data?.detail || 'Delete failed';
+      const message = error.response?.data?.message || error.response?.data?.detail || 'Delete failed';
       toast.error(message);
       return { success: false, message };
     }
